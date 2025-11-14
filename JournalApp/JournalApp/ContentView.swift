@@ -30,7 +30,7 @@ struct ContentView: View {
                 .tag(1) //main tab
                 
                 // --- TAB 3: GOALS ---
-                Text("Ecrã de Objetivos (Goals)")
+                GoalsView()
                     .toolbar(.hidden, for: .tabBar)
                 .tag(2)
             }

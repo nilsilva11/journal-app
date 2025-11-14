@@ -19,97 +19,106 @@ struct HomeView: View {
                 //header
                 MainHeaderView()
                 
+                
                 // --- QUICK DAYS NAVIGATOR ---
-                HStack(spacing: 20) {
-                    // previous button
-                    if showCalendarView {
-                        // --- month view ---
-                        Button(action: {
-                            // TODO: develop logic
-                            print("Mês Anterior Tapped")
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
-                                .font(.headline.weight(.bold))
-                                .padding(10)
-                                .background(Color("AppAccent"))
-                                .clipShape(Circle())
-                        }
-                        
-                        Text("October") // TODO: make it dinamic
-                            .font(.headline)
-                            .fontWeight(.bold)
-                        
-                        Button(action: {
-                            // TODO: make it to the next month
-                            print("Mês Seguinte Tapped")
-                        }) {
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.white)
-                                .font(.headline.weight(.bold))
-                                .padding(10)
-                                .background(Color("AppAccent"))
-                                .clipShape(Circle())
-                        }
-                        
-                    } else {
-                        // --- DAY VIEW ---
-                        Button(action: {
-                            // TODO: develop changing days
-                            print("Dia Anterior Tapped")
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .foregroundColor(.white)
-                                .font(.headline.weight(.bold))
-                                .padding(10)
-                                .background(Color("AppAccent"))
-                                .clipShape(Circle())
-                        }
-                        
-                        Text("Friday, 31 October") // TODO: make it dynamic
-                            .font(.headline)
-                            .fontWeight(.bold)
-                        
-                        Button(action: {
-                            // TODO: develop next day logic
-                            print("Dia Seguinte Tapped")
-                        }) {
-                            Image(systemName: "chevron.right")
-                                .foregroundColor(.white)
-                                .font(.headline.weight(.bold))
-                                .padding(10)
-                                .background(Color("AppAccent"))
-                                .clipShape(Circle())
-                        }
-                    }
-                }
-                .padding(.vertical, 10)
-                .padding(.horizontal, 20)
-                .background(Color(UIColor.systemGray6)) //card background
-                .cornerRadius(20)
-                .frame(maxWidth: .infinity, alignment: .center)
-                .padding() // hstack padding
-                
-                Button(action: {
-                    // button fill and unfill
-                
-                    withAnimation(.spring()) {
-                        showCalendarView.toggle()
-                    }
-                }) {
-                    Image(systemName: "calendar")
-                        .foregroundColor(.appAccent)
-                        .font(.title3)
-                        .foregroundColor(.blue.opacity(0.5))
-                        .padding(8)
-                        .background(
-                                                
-                            Circle()
-                                .fill(showCalendarView ? Color("AppAccent").opacity(0.5) : Color(UIColor.systemGray6))
-                        )
+                ZStack(alignment: .leading) {
                     
+                    Button(action: {
+                        // button fill and unfill
+                        
+                        withAnimation(.spring()) {
+                            showCalendarView.toggle()
+                        }
+                    }) {
+                        Image(systemName: "calendar")
+                            .foregroundColor(.appAccent)
+                            .font(.title2)
+                            .foregroundColor(.blue.opacity(0.5))
+                            .padding(8)
+                            .background(
+                                
+                                Circle()
+                                    .fill(showCalendarView ? Color("AppAccent").opacity(0.5) : Color(UIColor.systemGray6))
+                            )
+                        
+                    }
+                    .padding(.leading, 25)
+                    
+                    
+                    
+                    HStack(spacing: 15) {
+                        // previous button
+                        if showCalendarView {
+                            // --- month view ---
+                            Button(action: {
+                                // TODO: develop logic
+                                print("Mês Anterior Tapped")
+                            }) {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.white)
+                                    .font(.headline.weight(.bold))
+                                    .padding(10)
+                                    .background(Color("AppAccent"))
+                                    .clipShape(Circle())
+                            }
+                            
+                            Text("October") // TODO: make it dinamic
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            
+                            Button(action: {
+                                // TODO: make it to the next month
+                                print("Mês Seguinte Tapped")
+                            }) {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.white)
+                                    .font(.headline.weight(.bold))
+                                    .padding(10)
+                                    .background(Color("AppAccent"))
+                                    .clipShape(Circle())
+                            }
+                            
+                        } else {
+                            // --- DAY VIEW ---
+                            Button(action: {
+                                // TODO: develop changing days
+                                print("Dia Anterior Tapped")
+                            }) {
+                                Image(systemName: "chevron.left")
+                                    .foregroundColor(.white)
+                                    .font(.headline.weight(.bold))
+                                    .padding(10)
+                                    .background(Color("AppAccent"))
+                                    .clipShape(Circle())
+                            }
+                            
+                            Text("Friday, 31 October") // TODO: make it dynamic
+                                .font(.subheadline)
+                                .fontWeight(.semibold)
+                            
+                            Button(action: {
+                                // TODO: develop next day logic
+                                print("Dia Seguinte Tapped")
+                            }) {
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.white)
+                                    .font(.headline.weight(.bold))
+                                    .padding(10)
+                                    .background(Color("AppAccent"))
+                                    .clipShape(Circle())
+                            }
+                        }
+                    }
+                    .padding(.vertical, 9)
+                    .padding(.horizontal, 15)
+                    .background(Color(UIColor.systemGray6)) //card background
+                    .cornerRadius(20)
+                    .frame(maxWidth: .infinity)
+                    .padding() // hstack padding
                 }
-                .padding(.leading, 25)
+                //.padding(.horizontal)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
                 
                 //if button is clicked -> calendar appears else todays highlights
                 if showCalendarView {
