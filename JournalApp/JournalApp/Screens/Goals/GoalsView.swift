@@ -9,6 +9,9 @@ import SwiftUI
 
 struct GoalsView: View {
     
+    //to edit goal
+    @State private var selectedGoal: Goal? = nil
+    
     //to show add goal sheet
     @State private var showSheet: Bool = false
     
@@ -19,6 +22,7 @@ struct GoalsView: View {
         Goal(text: "Study", subtext: "Pass all my exams", isCompleted: true),
         Goal(text: "Running", subtext: "Run an half marathon", isCompleted: false)
     ]
+
     
     //completed goals
     var completedGoals: [Goal] {
@@ -40,6 +44,12 @@ struct GoalsView: View {
         allGoals.count
     }
     
+    //to know what month is it
+    private var currentMonthName: String {
+        Date().formatted(.dateTime.month(.wide)) 
+    }
+
+    
     func toggleCompletion(for toggledGoal: Goal) {
         
         //find goal
@@ -50,17 +60,30 @@ struct GoalsView: View {
         }
     }
     
+    func openGoalSheet(for goal: Goal) {
+        
+        //to open goal info sheet
+        selectedGoal = goal //to store tapped goal's info
+
+    }
+    
+    func deleteGoal(goalToDelete: Goal) {
+        
+        // to remove goal
+        allGoals.removeAll(where: { $0.id == goalToDelete.id })
+    }
+    
     
     var body: some View {
         
         ScrollView {
             VStack(alignment: .leading, spacing: 15) {
-                MainHeaderView()
+                MainHeaderView(showGreeting: false, name: "Sofia")
                    
                 
                 //page title
                 VStack (alignment: .leading, spacing: -10){
-                    Text("October") //TODO: make it dynamic
+                    Text(currentMonthName)
                     Text("Goals")
                         .foregroundColor(Color("AppAccent"))
                 }
@@ -111,11 +134,48 @@ struct GoalsView: View {
                     // bottomsheet
                     .presentationDetents([.height(400)])
                 }
+                .sheet(item: $selectedGoal) { goalToEdit in
+                    
+                    AddGoalView(
+                        //choose goal that was stored
+                        goalToEdit: goalToEdit,
+                        
+                        onSave: { (text, subtext) in
+                            
+                            //edit
+                            // Podemos usar o 'goalToEdit' que recebemos em segurança
+                            if let index = allGoals.firstIndex(where: { $0.id == goalToEdit.id }) {
+                                //update info
+                                allGoals[index].text = text
+                                allGoals[index].subtext = subtext
+                            }
+                            
+                            //close sheet (ao definir o item como nil)
+                            selectedGoal = nil
+                        },
+                        
+                        onDelete: {
+                            //find goal
+                            if let index = allGoals.firstIndex(where: { $0.id == goalToEdit.id }) {
+                                    withAnimation {
+                                        _ = allGoals.remove(at: index)
+                                    }
+                                }
+                                    
+                            // close sheet
+                                selectedGoal = nil
+                            }
+        
+                    )
+                    .presentationDetents([.height(400)])
+                }
                 
                 
                 MonthGoalsCardView(completed: completedGoals,
                                    inProgress: inProgressGoals,
-                                   onToggle: toggleCompletion)
+                                   onToggle: toggleCompletion,
+                                   onEdit: openGoalSheet,
+                                   onDelete: deleteGoal)
                 
                 
                 Spacer()//to get everything up

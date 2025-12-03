@@ -8,6 +8,10 @@
 import SwiftUI
 
 struct MainHeaderView: View {
+    
+    let showGreeting: Bool
+    let name: String
+    
     var body: some View {
         HStack {
             //user and saudation
@@ -21,19 +25,19 @@ struct MainHeaderView: View {
                 
                 //Text HStack to be able to use different colors
                 HStack(spacing: 0) {
-                    Text("Hi, ")
-                        .fontWeight(.semibold)
-                    
-                    Text("Sofia")
+                    if showGreeting { //Homescreen
+                        Text("Hi, ")
+                            .fontWeight(.semibold)
+                    }
+                    Text(name)
                         .fontWeight(.bold)
-                        .foregroundColor(Color("AppAccent")) //"Sofia Color"
-                    
+                        .foregroundColor(Color("AppAccent"))
                     Text(" 👋")
                         .fontWeight(.bold)
                 }
-                .font(.headline) //change font for whole hstack
+                .font(.headline)
                 
-                Text("Friday, 31 October, 2025")
+                Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide).year())
                     .font(.caption)
                     .foregroundColor(.secondary)
             }
@@ -51,6 +55,6 @@ struct MainHeaderView: View {
 }
 
 #Preview {
-    MainHeaderView()
+    MainHeaderView(showGreeting: true, name: "Sofia")
         
 }

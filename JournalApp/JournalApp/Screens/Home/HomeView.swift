@@ -17,7 +17,7 @@ struct HomeView: View {
             VStack(alignment: .leading, spacing: 20) {
                 
                 //header
-                MainHeaderView()
+                MainHeaderView(showGreeting: true, name: "Sofia")
                 
                 
                 // --- QUICK DAYS NAVIGATOR ---
@@ -82,7 +82,7 @@ struct HomeView: View {
                             // --- DAY VIEW ---
                             Button(action: {
                                 // TODO: develop changing days
-                                print("Dia Anterior Tapped")
+                                print("Last week Tapped")
                             }) {
                                 Image(systemName: "chevron.left")
                                     .foregroundColor(.white)
@@ -92,13 +92,13 @@ struct HomeView: View {
                                     .clipShape(Circle())
                             }
                             
-                            Text("Friday, 31 October") // TODO: make it dynamic
+                            Text("Week") // TODO: make it dynamic
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
                             
                             Button(action: {
                                 // TODO: develop next day logic
-                                print("Dia Seguinte Tapped")
+                                print("Next week Tapped")
                             }) {
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(.white)

@@ -24,8 +24,7 @@ struct ProgressBarView: View {
     
     var body: some View {
         
-        // O GeometryReader dá-nos o "proxy" (o tamanho do contentor)
-        // para sabermos qual é 100% da largura.
+        
         GeometryReader { proxy in
             // A ZStack permite-nos sobrepôr as duas barras:
             // 1. O fundo (a "calha")

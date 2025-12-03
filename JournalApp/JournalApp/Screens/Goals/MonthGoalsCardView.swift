@@ -10,11 +10,19 @@ import SwiftUI
 
     
 struct HighlightRow: View {
+    
+    @State private var showGoal: Bool = false
         
     let goal: Goal
     
+    //to open sheet
+    let onEdit: (Goal) -> Void
+    
     //to make checkboxes clickable
     let onToggle: (Goal) -> Void
+    
+    //to delete goal from goals list
+    let onDelete: (Goal) -> Void
         
     var body: some View {
         HStack(spacing: 15) {
@@ -31,8 +39,13 @@ struct HighlightRow: View {
                     Image(systemName: "checkmark").bold()
                         .foregroundColor(.white)
                 }
-                    
-                    
+       
+            }
+            .onTapGesture {
+                
+                withAnimation(.spring()) {
+                    onToggle(goal)
+                }
             }
                 
                 //Text(emoji)
@@ -42,30 +55,33 @@ struct HighlightRow: View {
                 
                 Text(goal.text)
                     .font(.title3).bold()
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                     .foregroundColor(.white)
                 
                 Text(goal.subtext)
                     .font(.body)
                     .fontWeight(.medium)
+                    .lineLimit(1)
+                    .truncationMode(.tail)
                     .foregroundColor(.white)
                 
                     
             }
+            .onTapGesture {
+                //open edit
+                onEdit(goal)
+            }
+    
                 
             Spacer()
         }
         .padding(20)
         .background(
-            goal.isCompleted ? Color("MonthBlue") : Color("ProgressCard").opacity(0.6)
+            goal.isCompleted ? Color("AppAccent") : Color("ProgressCard").opacity(0.6)
         )
         .cornerRadius(200) // rounded corners
-        
-        .onTapGesture {
-            
-            withAnimation(.spring()) { 
-                onToggle(goal)
-            }
-        }
+
     }
 }
     
@@ -76,6 +92,8 @@ struct MonthGoalsCardView: View {
     let completed: [Goal]
     let inProgress: [Goal]
     let onToggle: (Goal) -> Void
+    let onEdit: (Goal) -> Void
+    let onDelete: (Goal) -> Void
         
     
     var body: some View {
@@ -96,7 +114,8 @@ struct MonthGoalsCardView: View {
                 
                 VStack(spacing: 14) {
                     ForEach(completed) { goal in
-                        HighlightRow(goal: goal, onToggle: onToggle)
+                        HighlightRow(goal: goal, onEdit: onEdit, onToggle: onToggle, onDelete: onDelete)
+     
                     }
                 }
             }
@@ -104,7 +123,7 @@ struct MonthGoalsCardView: View {
         .padding(25) //whole card padding
         .background(
             //main card background color
-            Color("Completed").opacity(0.5)
+            Color("AppAccent").opacity(0.5)
         )
         .cornerRadius(30) //rounded corners
         .padding(.horizontal) //lateral padding
@@ -127,7 +146,7 @@ struct MonthGoalsCardView: View {
                 
                 VStack(spacing: 14) {
                     ForEach(inProgress) { goal in
-                        HighlightRow(goal: goal, onToggle: onToggle)
+                        HighlightRow(goal: goal,onEdit: onEdit, onToggle: onToggle, onDelete: onDelete)
                     }
                 }
             }
