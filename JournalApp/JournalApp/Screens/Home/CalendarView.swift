@@ -66,11 +66,6 @@ struct CalendarView: View {
 
     var body: some View {
         VStack {
-            //Month name
-            Text("October")
-                .font(.title)
-                .fontWeight(.bold)
-                .frame(maxWidth: .infinity, alignment: .leading)
             
             HStack(spacing: 5) {
                 Circle()

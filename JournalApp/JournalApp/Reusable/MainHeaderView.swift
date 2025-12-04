@@ -46,9 +46,10 @@ struct MainHeaderView: View {
             Spacer()
             
             //BELL
-            Image(systemName: "bell")
+            /*Image(systemName: "bell")
                 .font(.title2)
                 .foregroundColor(.secondary)
+             */
         }
         .padding(.horizontal) // horizontal padding
     }

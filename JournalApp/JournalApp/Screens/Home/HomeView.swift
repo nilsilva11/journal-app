@@ -18,11 +18,11 @@ struct HomeView: View {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: selectedDate)
         
-        // Encontra o domingo/segunda-feira anterior
+        
         guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: today) else { return [] }
         let startOfWeek = weekInterval.start
         
-        // Gera os 7 dias seguintes
+        //generate 7d
         return (0..<7).compactMap { i in
             calendar.date(byAdding: .day, value: i, to: startOfWeek)
         }
@@ -37,32 +37,51 @@ struct HomeView: View {
                 
                 
                 // --- QUICK DAYS NAVIGATOR ---
-                ZStack(alignment: .leading) {
+                HStack(alignment: .center) {
                     
+                    //month title
                     Button(action: {
-                        // button fill and unfill
-                        
-                        withAnimation(.spring()) {
+                        withAnimation { selectedDate = Date() } // click to today
+                    }) {
+                        HStack(spacing: 5) {
+                            Text(selectedDate.formatted(.dateTime.month(.wide)))
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .foregroundColor(.primary.opacity(0.8))
+                            
+                            Text(selectedDate.formatted(.dateTime.year()))
+                                .font(.title3)
+                                .foregroundColor(.secondary)
+                                .fontWeight(.medium)
+                        }
+                    }
+                    
+                    Spacer()
+                    
+                    //calendar view button
+                    Button(action: {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                             showCalendarView.toggle()
                         }
                     }) {
-                        Image(systemName: "calendar")
-                            .foregroundColor(.appAccent)
+                        Image(systemName: showCalendarView ? "list.bullet.below.rectangle" : "calendar")
                             .font(.title2)
-                            .foregroundColor(.blue.opacity(0.5))
-                            .padding(8)
+                            .fontWeight(.semibold)
+                            .foregroundColor(Color("AppAccent"))
+                            .padding(10)
                             .background(
-                                
                                 Circle()
-                                    .fill(showCalendarView ? Color("AppAccent").opacity(0.5) : Color(UIColor.systemGray6))
+                                    .fill(Color("AppAccent").opacity(0.1))
                             )
-                        
                     }
-                    .padding(.leading, 25)
+                    
+                }
+                .padding(.horizontal)
+                .padding(.bottom, 5) 
                     
                     
                     
-                    HStack(spacing: 15) {
+                    /*HStack(spacing: 15) {
                         // previous button
                         if showCalendarView {
                             // --- month view ---
@@ -93,36 +112,6 @@ struct HomeView: View {
                                     .background(Color("AppAccent"))
                                     .clipShape(Circle())
                             }
-                            
-                        } else {
-                            // --- DAY VIEW ---
-                            Button(action: {
-                                // TODO: develop changing days
-                                print("Last week Tapped")
-                            }) {
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(.white)
-                                    .font(.headline.weight(.bold))
-                                    .padding(10)
-                                    .background(Color("AppAccent"))
-                                    .clipShape(Circle())
-                            }
-                            
-                            Text("Week") // TODO: make it dynamic
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            
-                            Button(action: {
-                                // TODO: develop next day logic
-                                print("Next week Tapped")
-                            }) {
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.white)
-                                    .font(.headline.weight(.bold))
-                                    .padding(10)
-                                    .background(Color("AppAccent"))
-                                    .clipShape(Circle())
-                            }
                         }
                     }
                     .padding(.vertical, 9)
@@ -131,6 +120,7 @@ struct HomeView: View {
                     .cornerRadius(20)
                     .frame(maxWidth: .infinity)
                     .padding() // hstack padding
+                     */
                 }
                 //.padding(.horizontal)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -152,7 +142,7 @@ struct HomeView: View {
                 Spacer()
             }
         }
-    }
+
 }
 
 #Preview {
