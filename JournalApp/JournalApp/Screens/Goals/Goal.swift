@@ -6,10 +6,18 @@
 //
 
 import Foundation
+import SwiftData
 
-struct Goal: Identifiable {
-    let id = UUID() 
+@Model
+class Goal: Identifiable {
+    var id = UUID()
     var text: String
     var subtext: String
     var isCompleted: Bool
+    
+    init(text: String, subtext: String, isCompleted: Bool = false) {
+        self.text = text
+        self.subtext = subtext
+        self.isCompleted = isCompleted
+    }
 }

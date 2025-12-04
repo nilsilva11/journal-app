@@ -68,10 +68,6 @@ struct HighlightRow: View {
                 
                     
             }
-            .onTapGesture {
-                //open edit
-                onEdit(goal)
-            }
     
                 
             Spacer()
@@ -81,6 +77,10 @@ struct HighlightRow: View {
             goal.isCompleted ? Color("AppAccent") : Color("ProgressCard").opacity(0.6)
         )
         .cornerRadius(200) // rounded corners
+        .onTapGesture {
+            //open edit
+            onEdit(goal)
+        }
 
     }
 }

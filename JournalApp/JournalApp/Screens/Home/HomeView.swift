@@ -11,6 +11,22 @@ struct HomeView: View {
     
     //to show monthly calendar view
     @State private var showCalendarView: Bool = false
+    @State private var selectedDate: Date = Date()
+    
+    
+    var currentWeek: [Date] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: selectedDate)
+        
+        // Encontra o domingo/segunda-feira anterior
+        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: today) else { return [] }
+        let startOfWeek = weekInterval.start
+        
+        // Gera os 7 dias seguintes
+        return (0..<7).compactMap { i in
+            calendar.date(byAdding: .day, value: i, to: startOfWeek)
+        }
+    }
     
     var body: some View {
         ScrollView {
@@ -126,7 +142,10 @@ struct HomeView: View {
                     CalendarView()
                     TodaysHighlightsCard()
                 } else {
-                    //Highlights card
+                    WeekView(
+                        selectedDate: $selectedDate,
+                        currentWeek: selectedDate.currentWeek
+                    )
                     TodaysHighlightsCard()
                 }
                 

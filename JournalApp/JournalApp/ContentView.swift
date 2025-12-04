@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
     
@@ -36,10 +37,12 @@ struct ContentView: View {
             }
             .ignoresSafeArea(.keyboard)
             CustomTabView(selectedTab: $selectedTab)
+            
         }
     }
 }
 
 #Preview {
     ContentView()
+        .modelContainer(for: Goal.self, inMemory: true)
 }

@@ -6,8 +6,12 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct GoalsView: View {
+    
+    //to save data
+    @Environment(\.modelContext) private var modelContext
     
     //to edit goal
     @State private var selectedGoal: Goal? = nil
@@ -15,13 +19,8 @@ struct GoalsView: View {
     //to show add goal sheet
     @State private var showSheet: Bool = false
     
-    //list of goals
-    @State private var allGoals: [Goal] = [
-        
-        Goal(text: "Read", subtext: "Finish my book", isCompleted: true),
-        Goal(text: "Study", subtext: "Pass all my exams", isCompleted: true),
-        Goal(text: "Running", subtext: "Run an half marathon", isCompleted: false)
-    ]
+    //database
+    @Query var allGoals: [Goal]
 
     
     //completed goals
@@ -52,12 +51,7 @@ struct GoalsView: View {
     
     func toggleCompletion(for toggledGoal: Goal) {
         
-        //find goal
-        if let index = allGoals.firstIndex(where: { $0.id == toggledGoal.id }) {
-            
-            //invert completion state of goal
-            allGoals[index].isCompleted.toggle()
-        }
+        toggledGoal.isCompleted.toggle()
     }
     
     func openGoalSheet(for goal: Goal) {
@@ -70,7 +64,7 @@ struct GoalsView: View {
     func deleteGoal(goalToDelete: Goal) {
         
         // to remove goal
-        allGoals.removeAll(where: { $0.id == goalToDelete.id })
+        modelContext.delete(goalToDelete)
     }
     
     
@@ -124,10 +118,7 @@ struct GoalsView: View {
                         
                         // add goal to list
                         let newGoal = Goal(text: text, subtext: subtext, isCompleted: false)
-                        
-                        withAnimation {
-                            allGoals.append(newGoal)
-                        }
+                        modelContext.insert(newGoal)
                         
                         showSheet = false // 3. close sheet
                     })
@@ -143,29 +134,18 @@ struct GoalsView: View {
                         onSave: { (text, subtext) in
                             
                             //edit
-                            // Podemos usar o 'goalToEdit' que recebemos em segurança
-                            if let index = allGoals.firstIndex(where: { $0.id == goalToEdit.id }) {
-                                //update info
-                                allGoals[index].text = text
-                                allGoals[index].subtext = subtext
-                            }
+                                goalToEdit.text = text
+                                goalToEdit.subtext = subtext
                             
-                            //close sheet (ao definir o item como nil)
-                            selectedGoal = nil
+                                selectedGoal = nil
+                    
                         },
                         
                         onDelete: {
-                            //find goal
-                            if let index = allGoals.firstIndex(where: { $0.id == goalToEdit.id }) {
-                                    withAnimation {
-                                        _ = allGoals.remove(at: index)
-                                    }
-                                }
-                                    
-                            // close sheet
+                            
+                                modelContext.delete(goalToEdit)
                                 selectedGoal = nil
-                            }
-        
+                        }
                     )
                     .presentationDetents([.height(400)])
                 }
@@ -186,4 +166,5 @@ struct GoalsView: View {
 
 #Preview {
     GoalsView()
+        .modelContainer(for: Goal.self, inMemory: true)
 }

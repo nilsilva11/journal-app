@@ -105,7 +105,7 @@ struct AddGoalView: View {
                                     .padding(.vertical, 14)
                                     .padding(.horizontal, 16)
                             }
-                            .background(Color.red.opacity(0.9)) // button calor
+                            .background(Color.red.opacity(0.7)) // button calor
                             .cornerRadius(90) //
                             .frame(maxWidth: .infinity, alignment: .center)
                             .padding(.top, 10) //space above button
