@@ -13,58 +13,21 @@ struct GoalsView: View {
     //to save data
     @Environment(\.modelContext) private var modelContext
     
+    //database
+    @Query var allGoals: [Goal]
+    
+    //viewmodel
+    @State private var viewModel = GoalsViewModel()
+    
     //to edit goal
     @State private var selectedGoal: Goal? = nil
     
     //to show add goal sheet
     @State private var showSheet: Bool = false
     
-    //database
-    @Query var allGoals: [Goal]
-
-    
-    //completed goals
-    var completedGoals: [Goal] {
-        allGoals.filter { $0.isCompleted }
-    }
-   
-    //in progress goals
-    var inProgressGoals: [Goal] {
-        allGoals.filter { !$0.isCompleted }
-    }
-    
-    //how many completed goals
-    var completedCount: Int {
-        completedGoals.count
-    }
-    
-    //completed + in progress
-    var totalCount: Int {
-        allGoals.count
-    }
-    
     //to know what month is it
     private var currentMonthName: String {
         Date().formatted(.dateTime.month(.wide)) 
-    }
-
-    
-    func toggleCompletion(for toggledGoal: Goal) {
-        
-        toggledGoal.isCompleted.toggle()
-    }
-    
-    func openGoalSheet(for goal: Goal) {
-        
-        //to open goal info sheet
-        selectedGoal = goal //to store tapped goal's info
-
-    }
-    
-    func deleteGoal(goalToDelete: Goal) {
-        
-        // to remove goal
-        modelContext.delete(goalToDelete)
     }
     
     
@@ -86,6 +49,10 @@ struct GoalsView: View {
                 .padding(.horizontal)
                 
                 HStack {
+                    
+                    let completedCount = viewModel.filterCompleted(goals: allGoals).count
+                    let totalCount = allGoals.count
+                    
                     VStack (alignment: .leading, spacing: 5){
                         Text("\(completedCount) of \(totalCount) Completed")
                             .font(.subheadline)
@@ -116,9 +83,8 @@ struct GoalsView: View {
                     
                     AddGoalView(onSave: { (text, subtext) in
                         
-                        // add goal to list
-                        let newGoal = Goal(text: text, subtext: subtext, isCompleted: false)
-                        modelContext.insert(newGoal)
+                        // add goal
+                        viewModel.addGoal(text: text, subtext: subtext)
                         
                         showSheet = false // 3. close sheet
                     })
@@ -130,20 +96,15 @@ struct GoalsView: View {
                     AddGoalView(
                         //choose goal that was stored
                         goalToEdit: goalToEdit,
-                        
                         onSave: { (text, subtext) in
                             
                             //edit
-                                goalToEdit.text = text
-                                goalToEdit.subtext = subtext
-                            
+                                viewModel.updateGoal(goal: goalToEdit, text: text, subtext: subtext)
                                 selectedGoal = nil
-                    
                         },
-                        
                         onDelete: {
                             
-                                modelContext.delete(goalToEdit)
+                                viewModel.deleteGoal(goalToEdit)
                                 selectedGoal = nil
                         }
                     )
@@ -151,15 +112,27 @@ struct GoalsView: View {
                 }
                 
                 
-                MonthGoalsCardView(completed: completedGoals,
-                                   inProgress: inProgressGoals,
-                                   onToggle: toggleCompletion,
-                                   onEdit: openGoalSheet,
-                                   onDelete: deleteGoal)
+                MonthGoalsCardView(
+                    completed: viewModel.filterCompleted(goals: allGoals),
+                    inProgress: viewModel.filterInProgress(goals: allGoals),
+                    onToggle: { goal in
+                        viewModel.toggleGoal(goal) // Ação delegada ao VM
+                    },
+                    onEdit: { goal in
+                        selectedGoal = goal
+                    },
+                    onDelete: { goal in
+                        viewModel.deleteGoal(goal) // Ação delegada ao VM
+                        
+                    }
+                )
                 
                 
                 Spacer()//to get everything up
             }
+        }
+        .onAppear {
+            viewModel.modelContext = modelContext
         }
     }
 }
