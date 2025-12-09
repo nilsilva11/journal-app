@@ -9,6 +9,6 @@
   
 
 ## Screenshots
-| Goals Screen | 
-|------------|
-| ![Light](./9dec2.png) | 
+| Goals Screen | Add Goal Sheet | Goals Added |
+|------------|------------|------------|
+| ![Light](./9dec.png) | ![Light](./9dec3.png) |![Light](./9dec2.png) |
