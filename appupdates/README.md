@@ -9,6 +9,6 @@
   
 
 ## Screenshots
-| Initial Screen | 
+| Goals Screen | 
 |------------|
 | ![Light](./9dec2.png) | 
