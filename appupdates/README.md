@@ -1,12 +1,11 @@
 # Concepts learned/consolidated
 
 - MVVM architecture
-- Organization with HStacks, VStacks and ZStacks
+- UIKit integration for TabBar appearance
+- Layout Composition
 - Floating Action Button
-- TabBar appearance
 - SwiftData for persistence
 - UX/UI concepts for better experience
-  
 
 ## Screenshots
 | Goals Screen | Add Goal Sheet | Goals Added |
