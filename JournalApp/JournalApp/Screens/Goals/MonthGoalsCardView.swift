@@ -99,7 +99,7 @@ struct MonthGoalsCardView: View {
     var body: some View {
         VStack {
             VStack (alignment: .leading, spacing: 25) {
-                Text("👏 Completed")
+                Text("Completed")
                     .foregroundColor(.white).opacity(0.7)
                     .font(.footnote)
                     .fontWeight(.bold)
@@ -131,7 +131,7 @@ struct MonthGoalsCardView: View {
         
         VStack {
             VStack (alignment: .leading, spacing: 25) {
-                Text("💪 In Progress")
+                Text("In Progress")
                     .foregroundColor(.white).opacity(0.7)
                     .font(.footnote)
                     .fontWeight(.bold)
