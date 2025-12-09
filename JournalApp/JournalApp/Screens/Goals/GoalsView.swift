@@ -151,7 +151,7 @@ struct GoalsView: View {
             .onAppear {
                 viewModel.modelContext = modelContext
             }
-            .contentMargins(.bottom, 100, for: .scrollContent)
+            .contentMargins(.bottom, 70, for: .scrollContent)
         }
     }
 }
