@@ -6,72 +6,71 @@
 //
 
 import SwiftUI
+import UIKit
 
 struct CustomTabView: View {
-    
     @Binding var selectedTab: Int
     
-    var body: some View {
-
-        VStack(spacing: 0) {
-            
-            
-            Divider()
-                .background(Color.gray.opacity(0.1))
-            
-            HStack(spacing: 0) {
-                
-                // --- BUTTON 1: HABITS ---
-                TabBarButton(image: "list.bullet.clipboard.fill", text: "Habits", isSelected: selectedTab == 0) {
-                    selectedTab = 0
-                }
-                
-                // --- BUTTON 2: HOME ---
-                TabBarButton(image: "house.fill", text: "Home", isSelected: selectedTab == 1) {
-                    selectedTab = 1
-                }
-                
-                // --- BUTTON 3: GOALS ---
-                TabBarButton(image: "target", text: "Goals", isSelected: selectedTab == 2) {
-                    selectedTab = 2
-                }
-            }
-            .padding(.top, 12) //space between line and icons
-            .padding(.bottom, 2) //space between icons and home bar
-        }
-        .background(Color.white) // Fundo Branco
-        //simple shadow
-        .shadow(color: Color.black.opacity(0.05), radius: 2, x: 0, y: -2)
+    init(selectedTab: Binding<Int>) {
+        self._selectedTab = selectedTab
+        
+        //create config
+        let appearance = UITabBarAppearance()
+        appearance.configureWithOpaqueBackground()
+        
+        //normal icon color
+        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.progressCard
+        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.progressCard]
+        
+        // 3. Definir a cor para o estado SELECIONADO -> EntryBall
+        // Nota: Temos de usar UIColor(named:) porque estamos no contexto do UIKit aqui
+        let selectedColor = UIColor(named: "AppAccent") ?? UIColor.systemBlue
+        
+        appearance.stackedLayoutAppearance.selected.iconColor = selectedColor
+        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: selectedColor]
+        
+        // 4. Aplicar a configuração à TabBar global
+        UITabBar.appearance().standardAppearance = appearance
+        UITabBar.appearance().scrollEdgeAppearance = appearance
+        
     }
-}
 
-//buttons
-struct TabBarButton: View {
-    let image: String
-    let text: String
-    let isSelected: Bool
-    let action: () -> Void
-    
+
     var body: some View {
-        Button(action: action) {
-            VStack(spacing: 6) { //icon and text
-                Image(systemName: image)
-                    .font(.system(size: 22)) //icon size
-                
-                //text
-                Text(text)
-                    .font(.caption2)
-                    .fontWeight(isSelected ? .bold : .regular)
+        
+        TabView(selection: $selectedTab) {
+            NavigationStack {
+                Text("Habits")
+                    .navigationTitle("Habits")
             }
-            .foregroundColor(isSelected ? Color("EntryBall") : Color.gray.opacity(0.4))
-            .frame(maxWidth: .infinity)
+            .tabItem {
+                Image(systemName: "list.bullet.clipboard.fill")
+                Text("Habits")
+            }
+            .tag(0)
+
+            NavigationStack {
+                HomeView()
+            }
+            .tabItem {
+                Image(systemName: "house.fill")
+                Text("Home")
+            }
+            .tag(1)
+
+            NavigationStack {
+                GoalsView()
+            }
+            .tabItem {
+                Image(systemName: "target")
+                Text("Goals")
+            }
+            .tag(2)
         }
+        .tint(Color("EntryBall"))
     }
 }
 
 #Preview {
-    ZStack(alignment: .bottom) {
-        Color.gray.ignoresSafeArea()
-        CustomTabView(selectedTab: .constant(1))
-    }
+    CustomTabView(selectedTab: .constant(1))
 }
