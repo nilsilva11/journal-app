@@ -11,4 +11,4 @@
 ## Screenshots
 | Initial Screen | 
 |------------|
-| ![Light](./appupdates/9dec2.png) | 
+| ![Light](./9dec2.png) | 
