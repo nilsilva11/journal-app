@@ -17,13 +17,13 @@ struct WeekView: View {
         HStack(spacing: 10) {
             ForEach(currentWeek, id: \.self) { date in
                 VStack(spacing: 8) {
-                    // Dia da semana (Seg, Ter...)
+                    //week day
                     Text(date.format("EEE"))
                         .font(.caption)
                         .fontWeight(.medium)
                         .foregroundColor(date.isSameDay(as: selectedDate) ? .white : .gray)
                     
-                    // Número do dia (04, 05...)
+                    //day number
                     Text(date.format("dd"))
                         .font(.headline)
                         .fontWeight(.bold)
@@ -34,15 +34,15 @@ struct WeekView: View {
                 .background(
                     ZStack {
                         if date.isSameDay(as: selectedDate) {
-                            // Fundo para o dia selecionado (Estilo "AppAccent")
+                            
                             Capsule()
                                 .fill(Color("AppAccent"))
                                 .shadow(radius: 2)
                         } else {
-                            // Fundo para dias normais
+                            
                             Capsule()
                                 .fill(Color.white)
-                                .opacity(0.5) // Um pouco transparente
+                                .opacity(0.5) 
                         }
                     }
                 )
