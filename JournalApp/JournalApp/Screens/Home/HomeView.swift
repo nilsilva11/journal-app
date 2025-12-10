@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct HomeView: View {
     
@@ -14,6 +15,16 @@ struct HomeView: View {
     @State private var showCalendarView: Bool = false
     
     @State private var browsingMonth: Date = Date()
+    @State private var showEntrySheet: Bool = false
+    
+    @Environment(\.modelContext) private var modelContext
+    @Query(sort: \DailyEntry.date, order: .reverse) var allEntries: [DailyEntry]
+    
+    var todaysEntry: DailyEntry? {
+        allEntries.first { entry in
+            Calendar.current.isDate(entry.date, inSameDayAs: viewModel.selectedDate)
+        }
+    }
     
     var body: some View {
         
@@ -81,7 +92,7 @@ struct HomeView: View {
                 if showCalendarView {
                     //Calendar View
                     CalendarView(selectedDate: $viewModel.selectedDate, browsingMonth: $browsingMonth)
-                    TodaysHighlightsCard()
+                    journalSection
                 } else {
                     TabView(selection: $viewModel.weekIndex) {
                         ForEach(0..<3) { index in
@@ -100,7 +111,7 @@ struct HomeView: View {
                             
                         }
                     }
-                    TodaysHighlightsCard()
+                    journalSection
                 }
                 Spacer()
             }
@@ -110,10 +121,48 @@ struct HomeView: View {
                 }
             }
         }
+        .sheet(isPresented: $showEntrySheet) {
+            WriteEntryView(
+                entryToEdit: todaysEntry,
+                date: viewModel.selectedDate,
+                onSave: { title, text in
+                    viewModel.saveEntry(
+                        context: modelContext,
+                        existingEntry: todaysEntry,
+                        title: title,
+                        text: text
+                            
+                    )
+                }
+            )
+        }
+    }
+    
+    var journalSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Thoughts")
+                .font(.headline)
+                .padding(.horizontal)
+            
+            if let entry = todaysEntry {
+               
+                EntryPreviewCard(entry: entry) {
+                    showEntrySheet = true
+                }
+                .padding(.horizontal)
+            } else {
+                
+                EmptyEntryCard {
+                    showEntrySheet = true
+                }
+                .padding(.horizontal)
+            }
+        }
     }
 }
 
 
 #Preview {
     HomeView()
+        .modelContainer(for: DailyEntry.self, inMemory: true)
 }

@@ -16,6 +16,6 @@ struct JournalAppApp: App {
         WindowGroup {
             ContentView()
         }
-        .modelContainer(for: Goal.self)
+        .modelContainer(for: [Goal.self, DailyEntry.self])
     }
 }

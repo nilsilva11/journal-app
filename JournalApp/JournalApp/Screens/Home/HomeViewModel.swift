@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftData
 
 @Observable
 class HomeViewModel {
@@ -46,4 +47,22 @@ class HomeViewModel {
         currentWeekStart = Date().startOfWeek
         weekIndex = 1
     }
+    
+    func saveEntry(context: ModelContext, existingEntry: DailyEntry?, title: String, text: String) {
+            if let existingEntry = existingEntry {
+                //edit
+                existingEntry.title = title
+                existingEntry.text = text
+            } else {
+                //create
+                let newEntry = DailyEntry(
+                    date: selectedDate,
+                    title: title,
+                    text: text
+                )
+                context.insert(newEntry)
+            }
+            
+            try? context.save()
+        }
 }
