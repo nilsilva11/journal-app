@@ -10,23 +10,8 @@ import SwiftUI
 struct HomeView: View {
     
     //to show monthly calendar view
+    @State private var viewModel = HomeViewModel()
     @State private var showCalendarView: Bool = false
-    @State private var selectedDate: Date = Date()
-    
-    
-    var currentWeek: [Date] {
-        let calendar = Calendar.current
-        let today = calendar.startOfDay(for: selectedDate)
-        
-        
-        guard let weekInterval = calendar.dateInterval(of: .weekOfYear, for: today) else { return [] }
-        let startOfWeek = weekInterval.start
-        
-        //generate 7d
-        return (0..<7).compactMap { i in
-            calendar.date(byAdding: .day, value: i, to: startOfWeek)
-        }
-    }
     
     var body: some View {
         ScrollView {
@@ -41,15 +26,15 @@ struct HomeView: View {
                     
                     //month title
                     Button(action: {
-                        withAnimation { selectedDate = Date() } // click to today
+                        viewModel.resetToToday()
                     }) {
                         HStack(spacing: 5) {
-                            Text(selectedDate.formatted(.dateTime.month(.wide)))
+                            Text(viewModel.selectedDate.formatted(.dateTime.month(.wide)))
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(.primary.opacity(0.8))
                             
-                            Text(selectedDate.formatted(.dateTime.year()))
+                            Text(viewModel.selectedDate.formatted(.dateTime.year()))
                                 .font(.title3)
                                 .foregroundColor(.secondary)
                                 .fontWeight(.medium)
@@ -77,73 +62,42 @@ struct HomeView: View {
                     
                 }
                 .padding(.horizontal)
-                .padding(.bottom, 5) 
-                    
-                    
-                    
-                    /*HStack(spacing: 15) {
-                        // previous button
-                        if showCalendarView {
-                            // --- month view ---
-                            Button(action: {
-                                // TODO: develop logic
-                                print("Mês Anterior Tapped")
-                            }) {
-                                Image(systemName: "chevron.left")
-                                    .foregroundColor(.white)
-                                    .font(.headline.weight(.bold))
-                                    .padding(10)
-                                    .background(Color("AppAccent"))
-                                    .clipShape(Circle())
-                            }
-                            
-                            Text("October") // TODO: make it dinamic
-                                .font(.subheadline)
-                                .fontWeight(.semibold)
-                            
-                            Button(action: {
-                                // TODO: make it to the next month
-                                print("Mês Seguinte Tapped")
-                            }) {
-                                Image(systemName: "chevron.right")
-                                    .foregroundColor(.white)
-                                    .font(.headline.weight(.bold))
-                                    .padding(10)
-                                    .background(Color("AppAccent"))
-                                    .clipShape(Circle())
-                            }
-                        }
-                    }
-                    .padding(.vertical, 9)
-                    .padding(.horizontal, 15)
-                    .background(Color(UIColor.systemGray6)) //card background
-                    .cornerRadius(20)
-                    .frame(maxWidth: .infinity)
-                    .padding() // hstack padding
-                     */
-                }
-                //.padding(.horizontal)
-                .frame(maxWidth: .infinity, alignment: .leading)
-
-                
-                //if button is clicked -> calendar appears else todays highlights
-                if showCalendarView {
-                    //Calendar View
-                    CalendarView()
-                    TodaysHighlightsCard()
-                } else {
-                    WeekView(
-                        selectedDate: $selectedDate,
-                        currentWeek: selectedDate.currentWeek
-                    )
-                    TodaysHighlightsCard()
-                }
-                
-                Spacer()
+                .padding(.bottom, 5)
             }
+            //.padding(.horizontal)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            
+            
+            //if button is clicked -> calendar appears else todays highlights
+            if showCalendarView {
+                //Calendar View
+                CalendarView()
+                TodaysHighlightsCard()
+            } else {
+                TabView(selection: $viewModel.weekIndex) {
+                    ForEach(0..<3) { index in
+                        WeekView(
+                            selectedDate: $viewModel.selectedDate,
+                            currentWeek: viewModel.weeks[index]
+                        )
+                        .tag(index)
+                    }
+                }
+                .frame(height: 110)
+                .tabViewStyle(.page(indexDisplayMode: .never))
+                .onChange(of: viewModel.weekIndex) { oldValue, newValue in
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                        viewModel.updateWeekIndex(newValue)
+                        
+                    }
+                }
+                TodaysHighlightsCard()
+            }
+            Spacer()
         }
-
+    }
 }
+
 
 #Preview {
     HomeView()

@@ -42,4 +42,14 @@ extension Date {
             calendar.date(byAdding: .day, value: day, to: start)
         }
     }
+    
+    //next week
+    var nextWeek: Date {
+        Calendar.current.date(byAdding: .weekOfYear, value: 1, to: self) ?? self
+    }
+    
+    //previous week
+    var previousWeek: Date {
+        Calendar.current.date(byAdding: .weekOfYear, value: -1, to: self) ?? self
+    }
 }
