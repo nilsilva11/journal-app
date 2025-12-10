@@ -21,6 +21,11 @@
 - Custom Date Logic
 
 ## Home Screen Screenshots
-| Empty Entry | Write/Edit Entry | Week View | Month View |
-|------------|------------|------------|------------|
-| ![Light](./10dec1.png) | ![Light](./10dec2.png) |![Light](./10dec3.png) |![Light](./10dec4.png) |
+| Empty Entry | Write/Edit Entry | Week View |
+|------------|------------|------------|
+| ![Light](./10dec1.png) | ![Light](./10dec2.png) |![Light](./10dec3.png) |
+
+
+Month View | Date Picker |
+|------------|------------|
+|![Light](./10dec4.png) |![Light](./10dec5.png) |
