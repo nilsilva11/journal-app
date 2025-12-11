@@ -27,7 +27,7 @@ struct CalendarView: View {
     
     //layout
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
-    let weekDays = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+    let weekDays = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     
     
     var body: some View {
