@@ -1,4 +1,4 @@
-# Concepts learned/consolidated
+# Goals Screen - Concepts learned/consolidated
 
 - MVVM architecture
 - UIKit integration for TabBar appearance
@@ -12,7 +12,7 @@
 |------------|------------|------------|
 | ![Light](./9dec.png) | ![Light](./9dec3.png) |![Light](./9dec2.png) |
 
-# Concepts learned/consolidated
+# Home Screen - Concepts learned/consolidated
 
 - MVVM
 - Infinite Carousel
@@ -29,3 +29,15 @@
 Month View | Date Picker |
 |------------|------------|
 |![Light](./10dec4.png) |![Light](./10dec5.png) |
+
+## Home Screen Screenshots v2
+
+| Week View | Month View | Day Entries | Delete Entry |
+|------------|------------|------------|------------|
+| ![Light](./11dec1.png) | ![Light](./11dec2.png) |![Light](./11dec3.png) |![Light](./11dec4.png) |
+
+# What's next?
+
+- Refactor some code of Home View for better organization
+- Add time of each entry last modification
+- After finishing building habits tracker screen, use some features on home screen
