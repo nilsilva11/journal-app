@@ -12,10 +12,17 @@ struct WeekView: View {
     @Binding var selectedDate: Date //clicked day
     var currentWeek: [Date]
     
+    var entries: [DailyEntry]
+    
     
     var body: some View {
         HStack(spacing: 10) {
             ForEach(currentWeek, id: \.self) { date in
+                
+                let hasEntry = entries.contains { entry in
+                    Calendar.current.isDate(entry.date, inSameDayAs: date)
+                }
+                
                 VStack(spacing: 8) {
                     //week day
                     Text(date.format("EEE"))
@@ -44,6 +51,17 @@ struct WeekView: View {
                                 .fill(Color.white)
                                 .opacity(0.5) 
                         }
+                        
+                        if hasEntry && !date.isSameDay(as: selectedDate) {
+                            VStack {
+                                Spacer()
+                                Circle()
+                                    .fill(Color("AppAccent"))
+                                    .frame(width: 5, height: 5)
+                                    .padding(.bottom, 5) // Margem do fundo da cápsula
+                            }
+
+                        }
                     }
                 )
                 .onTapGesture {
@@ -61,7 +79,8 @@ struct WeekView: View {
 #Preview {
     WeekView(
         selectedDate: .constant(Date()),
-        currentWeek: [Date(), Date().addingTimeInterval(86400), Date().addingTimeInterval(172800)]
+        currentWeek: [Date(), Date().addingTimeInterval(86400), Date().addingTimeInterval(172800)],
+        entries: []
 
    )
 }

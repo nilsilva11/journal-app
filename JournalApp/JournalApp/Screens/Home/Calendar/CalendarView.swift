@@ -29,37 +29,45 @@ struct CalendarView: View {
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
     let weekDays = ["Sun","Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
     
+    var entries: [DailyEntry]
+    
     
     var body: some View {
         VStack(spacing: 20) {
             
             HStack {
-                HStack() {
+                HStack {
                     
                     Button(action: {
                         tempDate = viewModel.currentMonth
                         showDatePicker = true
                     }) {
-                        HStack(spacing: 4) {
+                        HStack(spacing: 5) {
                             
                             Text(viewModel.currentMonth.formatted(.dateTime.month(.abbreviated)))
-                                .font(.headline).bold()
-                            
+                                .bold()
+                                
                             Text(viewModel.currentMonth.formatted(.dateTime.year()))
-                                .font(.headline).fontWeight(.regular)
-                                .foregroundColor(.secondary)
+                                .fontWeight(.regular)
                             
                             Image(systemName: "chevron.down")
-                                .font(.caption2)
-                                .foregroundColor(.secondary)
-                            
-                            Spacer()
+                                .font(.caption2.bold())
                         }
+                        .font(.subheadline)
                         .foregroundColor(Color("AppAccent"))
+                        .padding(.vertical, 8)
+                        .padding(.horizontal, 16)
+                        .background(
+                            Capsule()
+                                .fill(Color("AppAccent").opacity(0.1))
+                        )
                     }
+                    Spacer()
                 }
             }
-            .padding(.horizontal)
+            .padding(.horizontal, 4)
+            
+            
             
             //week days
             HStack {
@@ -84,6 +92,10 @@ struct CalendarView: View {
                             let isSelected = date.isSameDay(as: selectedDate)
                             let isToday = Calendar.current.isDateInToday(date)
                             
+                            let hasEntry = entries.contains { entry in
+                                Calendar.current.isDate(entry.date, inSameDayAs: date)
+                            }
+                            
                             //day button
                             Button(action: {
                                 withAnimation { selectedDate = date }
@@ -101,6 +113,14 @@ struct CalendarView: View {
                                         ZStack {
                                             if isSelected { Circle().fill(Color("AppAccent")) }
                                             else if isToday { Circle().stroke(Color("AppAccent"), lineWidth: 1) }
+                                            
+                                            if hasEntry && !isSelected {
+                                                Circle()
+                                                    .fill(Color("AppAccent"))
+                                                    .frame(width: 5, height: 5) // Bolinha discreta
+                                                    .offset(y: 12) // Empurra para baixo do número
+                                                
+                                            }
                                         }
                                     )
                             }
@@ -130,7 +150,7 @@ struct CalendarView: View {
         }
         .padding()
         
-        .background(Color(UIColor.systemGray6))
+        .background(Color(UIColor.white))
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
         .padding(.horizontal)
@@ -181,6 +201,6 @@ struct CalendarView: View {
     @Previewable @State var browsingMonth: Date = Date()
     ZStack {
         Color(UIColor.systemGray6).ignoresSafeArea()
-        CalendarView(selectedDate: $selectedDate, browsingMonth: $browsingMonth)
+        CalendarView(selectedDate: $selectedDate, browsingMonth: $browsingMonth, entries: [])
     }
 }

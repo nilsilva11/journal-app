@@ -13,45 +13,46 @@ struct MainHeaderView: View {
     let name: String
     
     var body: some View {
-        HStack {
-            //user and saudation
-            Image(systemName: "person.crop.circle.fill") //place for user photo
-                .resizable()
-                .frame(width: 45, height: 45)
-                .clipShape(Circle())
-                .foregroundColor(.gray) //grey
+            HStack {
+                //user and saudation
+                Image(systemName: "person.crop.circle.fill") //place for user photo
+                    .resizable()
+                    .frame(width: 45, height: 45)
+                    .clipShape(Circle())
+                    .foregroundColor(.gray) //grey
 
-            VStack(alignment: .leading, spacing: 2) {
-                
-                //Text HStack to be able to use different colors
-                HStack(spacing: 0) {
-                    if showGreeting { //Homescreen
-                        Text("Hi, ")
-                            .fontWeight(.semibold)
+                VStack(alignment: .leading, spacing: 2) {
+                    
+                    //Text HStack to be able to use different colors
+                    HStack(spacing: 0) {
+                        if showGreeting { //Homescreen
+                            Text("Hi, ")
+                                .fontWeight(.semibold)
+                        }
+                        Text(name)
+                            .fontWeight(.bold)
+                            .foregroundColor(Color("AppAccent"))
+                        Text(" 👋")
+                            .fontWeight(.bold)
                     }
-                    Text(name)
-                        .fontWeight(.bold)
-                        .foregroundColor(Color("AppAccent"))
-                    Text(" 👋")
-                        .fontWeight(.bold)
+                    .font(.headline)
+                    
+                    Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide).year())
+                        .font(.caption)
+                        .foregroundColor(.secondary)
                 }
-                .font(.headline)
                 
-                Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide).year())
-                    .font(.caption)
+                // Spacer to right side
+                Spacer()
+                
+                //BELL
+                /*Image(systemName: "bell")
+                    .font(.title2)
                     .foregroundColor(.secondary)
+                 */
             }
-            
-            // Spacer to right side
-            Spacer()
-            
-            //BELL
-            /*Image(systemName: "bell")
-                .font(.title2)
-                .foregroundColor(.secondary)
-             */
-        }
-        .padding(.horizontal) // horizontal padding
+            .padding(.horizontal) // horizontal padding
+        
     }
 }
 

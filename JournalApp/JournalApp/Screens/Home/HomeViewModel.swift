@@ -53,6 +53,7 @@ class HomeViewModel {
                 //edit
                 existingEntry.title = title
                 existingEntry.text = text
+                
             } else {
                 //create
                 let newEntry = DailyEntry(
