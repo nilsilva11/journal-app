@@ -35,6 +35,18 @@ struct HomeView: View {
         }
     }
     
+    var monthlyEntryCount: Int {
+        let calendar = Calendar.current
+        
+        let entriesInMonth = allEntries.filter { entry in
+            calendar.isDate(entry.date, equalTo: viewModel.selectedDate, toGranularity: .month)
+        }
+        
+        let uniqueDays = Set(entriesInMonth.map { calendar.component(.day, from: $0.date) })
+        
+        return uniqueDays.count
+    }
+    
     struct SheetConfig: Identifiable {
         let id = UUID()
         let entry: DailyEntry?
@@ -118,7 +130,8 @@ struct HomeView: View {
                                 WeekView(
                                     selectedDate: $viewModel.selectedDate,
                                     currentWeek: viewModel.weeks[index],
-                                    entries: allEntries
+                                    entries: allEntries,
+                                    streakCount: monthlyEntryCount
                                 )
                                 .tag(index)
                             }

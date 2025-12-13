@@ -13,55 +13,82 @@ struct WeekView: View {
     var currentWeek: [Date]
     
     var entries: [DailyEntry]
+    var streakCount: Int
     
     
     var body: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
+            VStack(spacing: 4) {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 26))
+                    .foregroundColor(Color("EntryBall"))
+                    
+                HStack (spacing: 3) {
+                    Text("\(streakCount)")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                    
+                    Text("Days")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.top, 2)
+                }
+            }
+            .frame(width: 55)
+            .padding(.trailing, 2)
+
             ForEach(currentWeek, id: \.self) { date in
+                
+                let isSelected = date.isSameDay(as: selectedDate)
                 
                 let hasEntry = entries.contains { entry in
                     Calendar.current.isDate(entry.date, inSameDayAs: date)
                 }
                 
-                VStack(spacing: 8) {
-                    //week day
+                VStack(spacing: 6) {
+                    
                     Text(date.format("EEE"))
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor(date.isSameDay(as: selectedDate) ? .white : .gray)
+                        .foregroundColor((isSelected || hasEntry) ? .white : .gray)
                     
-                    //day number
-                    Text(date.format("dd"))
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(date.isSameDay(as: selectedDate) ? .white : .primary)
+                    
+                    if hasEntry && !isSelected {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 16, weight: .bold))
+                                .foregroundColor(.white)
+                            
+                        } else {
+                            
+                            Text(date.format("dd"))
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundColor((isSelected || hasEntry) ? .white : .primary)
+                            
+                        }
                 }
                 .frame(maxWidth: .infinity)
                 .padding(.vertical, 12)
                 .background(
                     ZStack {
-                        if date.isSameDay(as: selectedDate) {
+                        
+                        if isSelected {
                             
                             Capsule()
                                 .fill(Color("AppAccent"))
-                                .shadow(radius: 2)
+                                .shadow(color: Color("AppAccent").opacity(0.3), radius: 4, y: 2)
+                        } else if hasEntry {
+                            
+                            Capsule()
+                                .fill(Color("AppAccent").opacity(0.6))
                         } else {
                             
                             Capsule()
                                 .fill(Color.white)
-                                .opacity(0.5) 
+                                .opacity(0.5)
                         }
-                        
-                        if hasEntry && !date.isSameDay(as: selectedDate) {
-                            VStack {
-                                Spacer()
-                                Circle()
-                                    .fill(Color("AppAccent"))
-                                    .frame(width: 5, height: 5)
-                                    .padding(.bottom, 5) // Margem do fundo da cápsula
-                            }
-
-                        }
+   
                     }
                 )
                 .onTapGesture {
@@ -80,7 +107,8 @@ struct WeekView: View {
     WeekView(
         selectedDate: .constant(Date()),
         currentWeek: [Date(), Date().addingTimeInterval(86400), Date().addingTimeInterval(172800)],
-        entries: []
+        entries: [],
+        streakCount: 12
 
    )
 }

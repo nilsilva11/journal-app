@@ -54,4 +54,5 @@ class CalendarViewModel {
     func isToday(_ date: Date) -> Bool {
         Calendar.current.isDateInToday(date)
     }
+    
 }

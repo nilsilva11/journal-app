@@ -31,39 +31,68 @@ struct CalendarView: View {
     
     var entries: [DailyEntry]
     
+    var monthlyCount: Int {
+        let calendar = Calendar.current
+        
+        
+        let entriesInMonth = entries.filter { entry in
+            calendar.isDate(entry.date, equalTo: browsingMonth, toGranularity: .month)
+        }
+    
+        let uniqueDays = Set(entriesInMonth.map { calendar.component(.day, from: $0.date) })
+        
+        return uniqueDays.count
+    }
+    
     
     var body: some View {
         VStack(spacing: 20) {
             
+            //HStack {
             HStack {
-                HStack {
-                    
-                    Button(action: {
-                        tempDate = viewModel.currentMonth
-                        showDatePicker = true
-                    }) {
-                        HStack(spacing: 5) {
-                            
-                            Text(viewModel.currentMonth.formatted(.dateTime.month(.abbreviated)))
-                                .bold()
-                                
-                            Text(viewModel.currentMonth.formatted(.dateTime.year()))
-                                .fontWeight(.regular)
-                            
-                            Image(systemName: "chevron.down")
-                                .font(.caption2.bold())
-                        }
-                        .font(.subheadline)
-                        .foregroundColor(Color("AppAccent"))
-                        .padding(.vertical, 8)
-                        .padding(.horizontal, 16)
-                        .background(
-                            Capsule()
-                                .fill(Color("AppAccent").opacity(0.1))
-                        )
+                
+                Button(action: {
+                    tempDate = viewModel.currentMonth
+                    showDatePicker = true
+                }) {
+                    HStack(spacing: 5) {
+                        
+                        Text(viewModel.currentMonth.formatted(.dateTime.month(.abbreviated)))
+                            .bold()
+                        
+                        Text(viewModel.currentMonth.formatted(.dateTime.year()))
+                            .fontWeight(.regular)
+                        
+                        Image(systemName: "chevron.down")
+                            .font(.caption2.bold())
                     }
-                    Spacer()
+                    .font(.subheadline)
+                    .foregroundColor(Color("AppAccent"))
+                    .padding(.vertical, 8)
+                    .padding(.horizontal, 16)
+                    .background(
+                        Capsule()
+                            .fill(Color("AppAccent").opacity(0.1))
+                    )
                 }
+                Spacer()
+                
+                HStack(spacing: 4) {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 18))
+                        .foregroundColor(Color("EntryBall"))
+                    
+                    Text("\(monthlyCount)")
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
+                    
+                    Text("Days")
+                        .font(.caption)
+                        .foregroundColor(.secondary)
+                        .padding(.top, 2)
+                }
+                .padding(.horizontal, 4)
             }
             .padding(.horizontal, 4)
             
@@ -91,6 +120,7 @@ struct CalendarView: View {
                             let isCurrentMonth = date.isSameMonth(as: monthDate)
                             let isSelected = date.isSameDay(as: selectedDate)
                             let isToday = Calendar.current.isDateInToday(date)
+                            let isFuture = date > Date()
                             
                             let hasEntry = entries.contains { entry in
                                 Calendar.current.isDate(entry.date, inSameDayAs: date)
@@ -98,33 +128,44 @@ struct CalendarView: View {
                             
                             //day button
                             Button(action: {
-                                withAnimation { selectedDate = date }
+                                if !isFuture {
+                                    withAnimation { selectedDate = date }
+                                }
                             }) {
-                                Text(date.format("d"))
-                                    .font(.system(size: 16))
-                                    .fontWeight(isToday ? .bold : .regular)
-                                    .foregroundColor(
-                                        isSelected ? .white :
-                                            (isToday ? Color("AppAccent") :
-                                                (isCurrentMonth ? .primary : .secondary.opacity(0.3)))
-                                    )
-                                    .frame(width: 35, height: 35)
-                                    .background(
-                                        ZStack {
-                                            if isSelected { Circle().fill(Color("AppAccent")) }
-                                            else if isToday { Circle().stroke(Color("AppAccent"), lineWidth: 1) }
-                                            
-                                            if hasEntry && !isSelected {
-                                                Circle()
-                                                    .fill(Color("AppAccent"))
-                                                    .frame(width: 5, height: 5) // Bolinha discreta
-                                                    .offset(y: 12) // Empurra para baixo do número
-                                                
-                                            }
-                                        }
-                                    )
+                                ZStack {
+                                    if isSelected {
+                                        Circle()
+                                            .fill(Color("AppAccent"))
+                                    } else if hasEntry {
+                                        
+                                        Circle()
+                                            .fill(Color("AppAccent").opacity(0.6))
+                                    } else if isToday {
+                                        Circle()
+                                            .stroke(Color("AppAccent"), lineWidth: 1)
+                                        
+                                    }
+                                    
+                                    if hasEntry && !isSelected {
+                                        Image(systemName: "checkmark")
+                                            .font(.system(size: 14, weight: .bold))
+                                            .foregroundColor(.white)
+                                    } else {
+                                        
+                                        Text(date.format("d"))
+                                            .font(.system(size: 16))
+                                            .fontWeight(isToday || isSelected ? .bold : .regular)
+                                            .foregroundColor(
+                                                isSelected ? .white :
+                                                    (isFuture ? .gray.opacity(0.5) :
+                                                        (isCurrentMonth ? .primary : .secondary.opacity(0.7)))
+                                            )
+                                    }
+                                }
+                                .frame(width: 35, height: 35)
                             }
                             .buttonStyle(.plain)
+                            .disabled(isFuture)
                         }
                     }
                     .tag(index)
