@@ -41,3 +41,9 @@ Month View | Date Picker |
 - Refactor some code of Home View for better organization
 - Add time of each entry last modification
 - After finishing building habits tracker screen, use some features on home screen
+
+  ## Home Screen Screenshots v3
+
+| Week View | Month Picker |
+|------------|------------|
+|![Light](./13dec1.png) |![Light](./13dec2.png) |
