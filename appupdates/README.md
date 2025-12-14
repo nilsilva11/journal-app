@@ -44,6 +44,12 @@ Month View | Date Picker |
 
   ## Home Screen Screenshots v3
 
-| Week View | Month Picker |
+| Week View | Month View |
 |------------|------------|
 |![Light](./13dec1.png) |![Light](./13dec2.png) |
+
+  ## Home Screen Final Version (for now) v3
+
+| Week View | Month View |
+|------------|------------|
+|![Light](./14dec1.png) |![Light](./14dec2.png) |
