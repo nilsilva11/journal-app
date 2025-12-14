@@ -13,12 +13,12 @@ struct WeekView: View {
     var currentWeek: [Date]
     
     var entries: [DailyEntry]
-    var streakCount: Int
     
     
     var body: some View {
         HStack(spacing: 8) {
-            VStack(spacing: 4) {
+            
+            /*VStack(spacing: 4) {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 26))
                     .foregroundColor(Color("EntryBall"))
@@ -36,11 +36,13 @@ struct WeekView: View {
                 }
             }
             .frame(width: 55)
-            .padding(.trailing, 2)
+            .padding(.trailing, 2)*/
 
             ForEach(currentWeek, id: \.self) { date in
                 
                 let isSelected = date.isSameDay(as: selectedDate)
+                
+                let isFuture = date > Date()
                 
                 let hasEntry = entries.contains { entry in
                     Calendar.current.isDate(entry.date, inSameDayAs: date)
@@ -51,7 +53,7 @@ struct WeekView: View {
                     Text(date.format("EEE"))
                         .font(.caption)
                         .fontWeight(.medium)
-                        .foregroundColor((isSelected || hasEntry) ? .white : .gray)
+                        .foregroundColor(isFuture ? .gray.opacity(0.4) : ((isSelected || hasEntry) ? .white : .gray))
                     
                     
                     if hasEntry && !isSelected {
@@ -64,7 +66,7 @@ struct WeekView: View {
                             Text(date.format("dd"))
                                 .font(.headline)
                                 .fontWeight(.bold)
-                                .foregroundColor((isSelected || hasEntry) ? .white : .primary)
+                                .foregroundColor(isFuture ? .secondary.opacity(0.4) : ((isSelected || hasEntry) ? .white : .primary))
                             
                         }
                 }
@@ -92,8 +94,10 @@ struct WeekView: View {
                     }
                 )
                 .onTapGesture {
-                    withAnimation(.spring()) {
-                        selectedDate = date
+                    if !isFuture {
+                        withAnimation(.spring()) {
+                            selectedDate = date
+                        }       
                     }
                 }
             }
@@ -107,8 +111,7 @@ struct WeekView: View {
     WeekView(
         selectedDate: .constant(Date()),
         currentWeek: [Date(), Date().addingTimeInterval(86400), Date().addingTimeInterval(172800)],
-        entries: [],
-        streakCount: 12
+        entries: []
 
    )
 }

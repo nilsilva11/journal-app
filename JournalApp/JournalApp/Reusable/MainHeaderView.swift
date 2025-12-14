@@ -8,55 +8,79 @@
 import SwiftUI
 
 struct MainHeaderView: View {
+    var name: String = "Sofia"
     
-    let showGreeting: Bool
-    let name: String
+    var isCalendarExpanded: Binding<Bool>? = nil
     
-    var body: some View {
-            HStack {
-                //user and saudation
-                Image(systemName: "person.crop.circle.fill") //place for user photo
-                    .resizable()
-                    .frame(width: 45, height: 45)
-                    .clipShape(Circle())
-                    .foregroundColor(.gray) //grey
+    
+    var onSettingsTap: () -> Void = {}
 
+    var body: some View {
+        VStack(spacing: 20) {
+            
+            HStack(alignment: .center, spacing: 12) {
+                
+                ZStack {
+                    Circle()
+                        .fill(Color.gray.opacity(0.2))
+                    Image(systemName: "person.fill")
+                        .font(.system(size: 20))
+                        .foregroundColor(.gray)
+                }
+                .frame(width: 45, height: 45)
+                .clipShape(Circle())
+                
                 VStack(alignment: .leading, spacing: 2) {
-                    
-                    //Text HStack to be able to use different colors
-                    HStack(spacing: 0) {
-                        if showGreeting { //Homescreen
-                            Text("Hi, ")
-                                .fontWeight(.semibold)
-                        }
-                        Text(name)
-                            .fontWeight(.bold)
-                            .foregroundColor(Color("AppAccent"))
-                        Text(" 👋")
-                            .fontWeight(.bold)
-                    }
-                    .font(.headline)
-                    
-                    Text(Date.now, format: .dateTime.weekday(.wide).day().month(.wide).year())
+                    Text("Good Morning,")
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(Color("AppAccent"))
+                        .fontWeight(.medium)
+                    
+                    Text("\(name) 👋")
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(.primary)
                 }
                 
-                // Spacer to right side
                 Spacer()
                 
-                //BELL
-                /*Image(systemName: "bell")
-                    .font(.title2)
-                    .foregroundColor(.secondary)
-                 */
+                if let isExpanded = isCalendarExpanded {
+                    Button(action: {
+                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                            isExpanded.wrappedValue.toggle()
+                        }
+                    }) {
+                        Image(systemName: isExpanded.wrappedValue ? "rectangle.grid.1x2" : "calendar")
+                            .font(.system(size: 18, weight: .medium))
+                            .foregroundColor(Color("AppAccent"))
+                            .frame(width: 45, height: 45)
+                            .background(
+                                Circle()
+                                    .stroke(Color.secondary.opacity(0.2), lineWidth: 1)
+                                    .background(Circle().fill(Color.white))
+                            )
+                            .shadow(color: .black.opacity(0.02), radius: 5, x: 0, y: 2)
+                    }
+                    
+                }
             }
-            .padding(.horizontal) // horizontal padding
-        
+            .padding(.horizontal)
+            
+            Divider()
+                .background(Color.primary.opacity(0.8))
+                .padding(.horizontal, 20)
+        }
+        .padding(.top, 10)
+        .background(Color(UIColor.systemGray6))
     }
 }
 
 #Preview {
-    MainHeaderView(showGreeting: true, name: "Sofia")
-        
+    ZStack {
+        Color(UIColor.systemGray6).ignoresSafeArea()
+        VStack {
+            MainHeaderView(name: "Sofia", isCalendarExpanded: .constant(false))
+            Spacer()
+        }
+    }
 }

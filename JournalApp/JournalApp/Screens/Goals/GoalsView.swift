@@ -41,7 +41,7 @@ struct GoalsView: View {
             
             VStack (alignment: .leading, spacing: 15) {
                 
-                MainHeaderView(showGreeting: false, name: "Sofia")
+                MainHeaderView( name: "Sofia")
                 
                 
                 ScrollView {

@@ -60,84 +60,83 @@ struct HomeView: View {
             
             VStack (alignment: .leading, spacing: 15) {
                 
-                MainHeaderView(showGreeting: true, name: "Sofia")
+                MainHeaderView( name: "Sofia", isCalendarExpanded: $showCalendarView)
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
                         
                         
                         
-                        
                         // --- QUICK DAYS NAVIGATOR ---
                         HStack(alignment: .center) {
                             
+
                             //month title
                             Button(action: {
                                 viewModel.resetToToday()
                                 browsingMonth = Date()
                             }) {
                                 HStack(spacing: 5) {
-                                    let titleDate = showCalendarView ? browsingMonth : viewModel.selectedDate
                                     
-                                    Text(titleDate.formatted(.dateTime.month(.wide)))
-                                        .font(.largeTitle)
+                                    Text(Date().formatted(.dateTime.weekday(.wide)) + ", " + Date().formatted(.dateTime.day()))
+                                        .font(.headline)
                                         .fontWeight(.semibold)
-                                        .foregroundColor(.primary.opacity(0.8))
-                                    
-                                    Text(titleDate.formatted(.dateTime.year()))
-                                        .font(.title3)
-                                        .foregroundColor(.secondary)
-                                        .fontWeight(.medium)
+                                        .foregroundStyle(Color(.secondaryLabel))
                                 }
                                 .id(showCalendarView ? "browsing" : "selected")
                             }
                             
-                            Spacer()
-                            
-                            //calendar view button
-                            Button(action: {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                    showCalendarView.toggle()
-                                }
-                            }) {
-                                Image(systemName: showCalendarView ? "list.bullet.below.rectangle" : "calendar")
-                                    .font(.title2)
-                                    .fontWeight(.semibold)
-                                    .foregroundColor(Color("EntryBall").opacity(0.5))
-                                    .padding(10)
-                                    .background(
-                                        Circle()
-                                            .fill(Color("AppAccent").opacity(0.2))
-                                    )
-                            }
-                            
                         }
-                        .padding(.horizontal)
+                        .frame(maxWidth: .infinity)
                         .padding(.bottom, 5)
                     }
                     //.padding(.horizontal)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     
                     
-                    //if button is clicked -> calendar appears else todays highlights
+                    
                     if showCalendarView {
                         //Calendar View
                         CalendarView(selectedDate: $viewModel.selectedDate, browsingMonth: $browsingMonth, entries: allEntries)
                         journalSection
                     } else {
-                        TabView(selection: $viewModel.weekIndex) {
-                            ForEach(0..<3) { index in
-                                WeekView(
-                                    selectedDate: $viewModel.selectedDate,
-                                    currentWeek: viewModel.weeks[index],
-                                    entries: allEntries,
-                                    streakCount: monthlyEntryCount
-                                )
-                                .tag(index)
+                        
+                        HStack(spacing: 0) {
+                            
+                            VStack(spacing: 4) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 26))
+                                    .foregroundColor(Color("EntryBall"))
+                                    
+                                HStack (spacing: 3) {
+                                    Text("\(monthlyEntryCount)")
+                                        .font(.headline)
+                                        .fontWeight(.bold)
+                                        .foregroundColor(.primary)
+                                    
+                                    Text("Days")
+                                        .font(.caption)
+                                        .foregroundColor(.secondary)
+                                        .padding(.top, 2)
+                                }
+                            }
+                            .frame(width: 45)
+                            .padding(.leading, 10)
+    
+                            TabView(selection: $viewModel.weekIndex) {
+                                ForEach(0..<3) { index in
+                                    WeekView(
+                                        selectedDate: $viewModel.selectedDate,
+                                        currentWeek: viewModel.weeks[index],
+                                        entries: allEntries,
+                                    )
+                                    .tag(index)
+                                }
                             }
                         }
                         .frame(height: 110)
                         .tabViewStyle(.page(indexDisplayMode: .never))
+                        .padding(.top, -23)
                         .onChange(of: viewModel.weekIndex) { oldValue, newValue in
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
                                 viewModel.updateWeekIndex(newValue)
