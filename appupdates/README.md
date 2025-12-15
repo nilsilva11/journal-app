@@ -59,7 +59,7 @@ Month View | Date Picker |
 
 - Form
 - Sections
-- Spent 3 hours try to resolve a bug that I couldn´t find. I just had to write a line of code to solve it. Nice
+- Spent 3 hours trying to resolve a bug that I couldn´t find. I just had to write a line of code to solve it. Nice
 
 ## Habits Screen Screenshots
 | New Habit Sheet        | Tracking period        | Colors for organization | Habits Overview        |
