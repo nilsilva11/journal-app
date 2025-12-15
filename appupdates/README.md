@@ -53,3 +53,16 @@ Month View | Date Picker |
 | Week View | Month View |
 |------------|------------|
 |![Light](./14dec1.png) |![Light](./14dec2.png) |
+
+
+# Habits Tracker - Concepts learned/consolidated
+
+- Form
+- Sections
+
+## Habits Screen Screenshots
+| New Habit Sheet        | Tracking period        | Colors for organization | Habits Overview        |
+|------------------------|------------------------|-------------------------|------------------------|
+| ![Light](./15dec1.png) | ![Light](./15dec2.png) |![Light](./15dec3.png)   | ![Light](./15dec4.png) |
+
+
