@@ -121,7 +121,7 @@ struct AddHabitView: View {
     
                                     
                     Toggle("Set End Date", isOn: $hasEndDate)
-                                        .tint(selectedColor)
+                        .tint(selectedColor)
                     
                                     
                     if hasEndDate {
@@ -169,11 +169,11 @@ struct AddHabitView: View {
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Create") { // Mudei para "Create" para soar mais pro
+                    Button("Create") {
                         saveHabit()
                     }
                     .fontWeight(.semibold)
-                    .disabled(title.isEmpty || icon.isEmpty) // Bloqueia se não tiver nome ou emoji
+                    .disabled(title.isEmpty || icon.isEmpty) 
                 }
             }
         }
