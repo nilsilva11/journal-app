@@ -20,7 +20,7 @@ struct ContentView: View {
                 
 
                 // --- TAB 1: HABITS ---
-                Text("Ecrã de Hábitos (Habits)")
+                HabitsView()
                     .toolbar(.hidden, for: .tabBar)
                
                 .tag(0)
