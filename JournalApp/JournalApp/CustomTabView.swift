@@ -40,8 +40,7 @@ struct CustomTabView: View {
         
         TabView(selection: $selectedTab) {
             NavigationStack {
-                Text("Habits")
-                    .navigationTitle("Habits")
+                TrackerView()
             }
             .tabItem {
                 Image(systemName: "list.bullet.clipboard.fill")

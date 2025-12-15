@@ -14,35 +14,14 @@ struct ContentView: View {
     @State private var selectedTab: Int = 1
     var body: some View {
         
-        ZStack(alignment: .bottom) {
-            
-            TabView(selection: $selectedTab) {
-                
-
-                // --- TAB 1: HABITS ---
-                HabitsView()
-                    .toolbar(.hidden, for: .tabBar)
-               
-                .tag(0)
-
-                // --- TAB 2: HOME  ---
-                HomeView()
-                    .toolbar(.hidden, for: .tabBar)
-                .tag(1) //main tab
-                
-                // --- TAB 3: GOALS ---
-                GoalsView()
-                    .toolbar(.hidden, for: .tabBar)
-                .tag(2)
-            }
-            .ignoresSafeArea(.keyboard)
-            CustomTabView(selectedTab: $selectedTab)
-            
-        }
+        CustomTabView(selectedTab: $selectedTab)
+        
     }
 }
 
+
 #Preview {
     ContentView()
-        .modelContainer(for: Goal.self, inMemory: true)
+        .modelContainer(for: [Goal.self, DailyEntry.self, Habit.self], inMemory: true)
 }
+
