@@ -9,85 +9,108 @@ import SwiftUI
 import SwiftData
 
 struct TrackerView: View {
+    @Environment(\.modelContext) private var modelContext
     
     @Query(sort: \Habit.createdAt, order: .reverse) var habits: [Habit]
     @State private var showAddSheet: Bool = false
     
+    @State private var habitToEdit: Habit?
+    
     var body: some View {
         
-        ZStack {
-            
-            Color(UIColor.systemGray6)
-                .ignoresSafeArea()
-            
-            
-            VStack (alignment: .leading, spacing: 15) {
+        NavigationStack {
+            ZStack {
                 
-                MainHeaderView( name: "Sofia")
+                Color(UIColor.systemGray6)
+                    .ignoresSafeArea()
                 
-                ScrollView {
-                    VStack(alignment: .leading, spacing: 15) {
-                        
-                        VStack (alignment: .leading, spacing: -10){
-                            Text("Habits")
-                            Text("Tracker")
-                                .foregroundColor(Color("AppAccent"))
-                        }
-                        .font(.system(size: 48)).bold()
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.horizontal)
-                        
-                        if habits.isEmpty {
                 
-                            VStack(spacing: 10) {
-                                Image(systemName: "sparkles")
-                                    .font(.system(size: 50))
-                                    .foregroundStyle(.secondary)
-                                    .padding(.bottom, 5)
-                                Text("No habits yet")
-                                    .font(.headline)
-                                Text("Tap + to start your journey")
-                                    .font(.subheadline)
-                                    .foregroundStyle(.secondary)
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding(.top, 50)
-                            
-                            
-                        } else {
-                            
-                            LazyVStack(spacing: 20) {
-                                ForEach(habits) { habit in
-                                    HabitHeatmapCard(habit: habit)
-                                }
-                            }
-                            .padding(.horizontal)
-                            .padding(.bottom, 100)
-                            
-                        }
-                    }
-                }
-                .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                    Button(action: {
-                        showAddSheet = true
-                    }) {
-                        Image(systemName: "plus")
-                            .font(.title2.bold())
-                            .foregroundColor(.white)
-                            .frame(width: 56, height: 56)
-                            .background(Color("AppAccent"))
-                            .clipShape(Circle())
-                            .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)
-                    }
-                    .padding(.trailing, 20)
-                    .padding(.bottom, 30)
+                VStack (alignment: .leading, spacing: 15) {
                     
+                    MainHeaderView( name: "Sofia")
+                    
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: 15) {
+                            
+                            VStack (alignment: .leading, spacing: -10){
+                                Text("Habits")
+                                Text("Tracker")
+                                    .foregroundColor(Color("AppAccent"))
+                            }
+                            .font(.system(size: 48)).bold()
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.horizontal)
+                            
+                            if habits.isEmpty {
+                                
+                                VStack(spacing: 5) {
+                                    Image("Journal")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(height: 250)
+                                    Text("No habits yet")
+                                        .font(.headline)
+                                    Text("Tap + to start your journey")
+                                        .font(.subheadline)
+                                        .foregroundStyle(.secondary)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .padding(.top, 50)
+                                
+                                
+                            } else {
+                                
+                                LazyVStack(spacing: 20) {
+                                    ForEach(habits) { habit in
+                                        NavigationLink(destination: HabitDetailView(habit: habit)) {
+                                                    
+                                                    HabitHeatmapCard(
+                                                        habit: habit,
+                                                        onEdit: {
+                                                            habitToEdit = habit
+                                                            showAddSheet = true
+                                                        },
+                                                        onDelete: {
+                                                            withAnimation {
+                                                                modelContext.delete(habit)
+                                                            }
+                                                        }
+                                                    )
+                                                }
+                                        
+                                                .buttonStyle(.plain)
+                                            }
+                                }
+                                .padding(.horizontal)
+                                .padding(.bottom, 100)
+                                
+                            }
+                        }
+                    }
+                    .safeAreaInset(edge: .bottom, alignment: .trailing) {
+                        Button(action: {
+                            habitToEdit = nil
+                            showAddSheet = true
+                        }) {
+                            Image(systemName: "plus")
+                                .font(.title2.bold())
+                                .foregroundColor(.white)
+                                .frame(width: 56, height: 56)
+                                .background(Color("AppAccent"))
+                                .clipShape(Circle())
+                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)
+                        }
+                        .padding(.trailing, 20)
+                        .padding(.bottom, 30)
+                        
+                    }
+                    .contentMargins(.bottom, 70, for: .scrollContent)
                 }
-                .contentMargins(.bottom, 70, for: .scrollContent)
             }
         }
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showAddSheet) {
-            AddHabitView()
+            AddHabitView(habitToEdit: habitToEdit)
         }
     }
 }

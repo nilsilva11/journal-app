@@ -12,6 +12,8 @@ struct AddHabitView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
+    var habitToEdit: Habit?
+    
     @State private var title: String = ""
     @State private var icon: String = "📝"
     @State private var selectedColor: Color = Color("AppAccent")
@@ -38,10 +40,11 @@ struct AddHabitView: View {
                     ZStack {
                         
                         Circle()
-                        
-                            .fill(selectedColor.opacity(0.3))
+                            
+                            .stroke(Color(.gray), lineWidth: 1)
+                            .fill(.white)
                             .frame(width: 120, height: 120)
-                            .shadow(color: selectedColor.opacity(0.3), radius: 15, x: 0, y: 10)
+                            //.shadow(color: selectedColor.opacity(0.3), radius: 15, x: 0, y: 10)
                         
                         TextField("", text: $icon)
                             .font(.system(size: 75))
@@ -161,7 +164,27 @@ struct AddHabitView: View {
                     .padding(.vertical, 10)
                 }
             }
-            .navigationTitle("New Habit")
+            .scrollContentBackground(.hidden)
+            //Blobs
+            .background(
+                ZStack {
+                    Color(UIColor.systemGray6).ignoresSafeArea()
+    
+                    Circle()
+                        .fill(selectedColor.opacity(0.5))
+                        .frame(width: 300, height: 300)
+                        .blur(radius: 150)
+                        .offset(x: -100, y: -200)
+                    
+                    
+                    Circle()
+                        .fill(selectedColor.opacity(0.5))
+                        .frame(width: 250, height: 250)
+                        .blur(radius: 120)
+                        .offset(x: 100, y: 300)
+                }
+            )
+            .navigationTitle(habitToEdit == nil ? "New Habit" : "Edit Habit")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -169,11 +192,24 @@ struct AddHabitView: View {
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Create") {
+                    Button(habitToEdit == nil ? "Create" : "Save") {
                         saveHabit()
                     }
                     .fontWeight(.semibold)
                     .disabled(title.isEmpty || icon.isEmpty) 
+                }
+            }
+            .onAppear {
+                if let habit = habitToEdit {
+                    title = habit.title
+                    icon = habit.icon
+                    selectedColor = Color(hex: habit.colorHex)
+                    selectedDays = Set(habit.frequency)
+                    startDate = habit.startDate
+                    if let end = habit.endDate {
+                        endDate = end
+                        hasEndDate = true
+                    }
                 }
             }
         }
@@ -185,16 +221,29 @@ struct AddHabitView: View {
         let frequencyArray = Array(selectedDays)
         let finalEndDate = hasEndDate ? endDate : nil
         
-        let newHabit = Habit(
-            title: title,
-            icon: finalIcon,
-            colorHex: hexColor,
-            frequency: frequencyArray,
-            startDate: startDate,
-            endDate: finalEndDate
-        )
+        if let habit = habitToEdit {
+                    
+            habit.title = title
+            habit.icon = finalIcon
+            habit.colorHex = hexColor
+            habit.frequency = frequencyArray
+            habit.startDate = startDate
+            habit.endDate = finalEndDate
+                    
+        } else {
+            
+            let newHabit = Habit(
+                title: title,
+                icon: finalIcon,
+                colorHex: hexColor,
+                frequency: frequencyArray,
+                startDate: startDate,
+                endDate: finalEndDate
+            )
+            modelContext.insert(newHabit)
+            
+        }
         
-        modelContext.insert(newHabit)
         dismiss()
         
     }

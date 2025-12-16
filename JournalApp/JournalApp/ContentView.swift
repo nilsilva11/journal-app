@@ -25,3 +25,5 @@ struct ContentView: View {
         .modelContainer(for: [Goal.self, DailyEntry.self, Habit.self], inMemory: true)
 }
 
+
+

@@ -9,12 +9,14 @@ import SwiftUI
 
 struct HabitHeatmapCard: View {
     let habit: Habit
+    var onEdit: () -> Void
+    var onDelete: () -> Void
     
     
-    let rows = 7
-    let columns = 15
-    let dotSize: CGFloat = 10
-    let spacing: CGFloat = 6
+    let rows = 5
+    let columns = 20
+    let dotSize: CGFloat = 11
+    let spacing: CGFloat = 5
     
     var habitColor: Color {
         Color(hex: habit.colorHex)
@@ -26,7 +28,7 @@ struct HabitHeatmapCard: View {
             HStack {
                 ZStack {
                     Circle()
-                        .fill(habitColor.opacity(0.15))
+                        .fill(.white.opacity(0.5))
                         .frame(width: 40, height: 40)
                     Text(habit.icon)
                         .font(.system(size: 20))
@@ -44,8 +46,24 @@ struct HabitHeatmapCard: View {
                 
                 Spacer()
                 
-                Image(systemName: "ellipsis")
-                    .foregroundStyle(.gray)
+                Menu {
+                    Button {
+                        onEdit()
+                    } label: {
+                        Label("Edit", systemImage: "pencil")
+                    }
+
+                    Button(role: .destructive) {
+                        onDelete()
+                    } label: {
+                        Label("Delete", systemImage: "trash")
+                    }
+                } label: {
+                    Image(systemName: "ellipsis")
+                        .foregroundStyle(.gray)
+                        .frame(width: 30, height: 30)
+                        .contentShape(Rectangle())
+                }
             }
             
             
@@ -69,8 +87,8 @@ struct HabitHeatmapCard: View {
                                 let isCompleted = habit.isCompleted(on: date)
                                 let isFuture = date > Date()
                                 
-                                Circle()
-                                    .fill(isCompleted ? habitColor : Color(UIColor.systemGray6))
+                                RoundedRectangle(cornerRadius: 3)
+                                    .fill(isCompleted ? habitColor : Color(.white).opacity(0.6))
                                     .opacity(isFuture ? 0 : 1)
                                     .frame(width: dotSize, height: dotSize)
                             }
@@ -81,7 +99,7 @@ struct HabitHeatmapCard: View {
             .padding(.top, 5)
         }
         .padding(16)
-        .background(Color.white)
+        .background(Color(hex: habit.colorHex).opacity(0.1))
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
@@ -114,7 +132,9 @@ struct HabitHeatmapCard: View {
 
 #Preview {
     HabitHeatmapCard(
-            habit: Habit(title: "Morning Run", icon: "🏃‍♂️", colorHex: "FF5733", frequency: [1,2,4,5], startDate: Date(), endDate: nil)
+            habit: Habit(title: "Morning Run", icon: "🏃‍♂️", colorHex: "FF5733", frequency: [1,2,4,5], startDate: Date(), endDate: nil),
+            onEdit: {},   
+            onDelete: {}
         )
         .padding()
         .background(Color(UIColor.systemGray6))

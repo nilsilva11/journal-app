@@ -58,7 +58,7 @@ struct CalendarView: View {
                     HStack(spacing: 5) {
                         
                         Text(viewModel.currentMonth.formatted(.dateTime.month(.abbreviated)))
-                            .bold()
+                            .fontWeight(.regular)
                         
                         Text(viewModel.currentMonth.formatted(.dateTime.year()))
                             .fontWeight(.regular)
