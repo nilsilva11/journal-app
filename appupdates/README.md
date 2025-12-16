@@ -61,9 +61,19 @@ Month View | Date Picker |
 - Sections
 - Spent 3 hours trying to resolve a bug that I couldn´t find. I just had to write a line of code to solve it. Nice
 
-## Habits Screen Screenshots
+## Habits Screen Screenshots 15 december 2025
 | New Habit Sheet        | Tracking period        | Colors for organization | Habits Overview        |
 |------------------------|------------------------|-------------------------|------------------------|
 | ![Light](./15dec1.png) | ![Light](./15dec2.png) |![Light](./15dec3.png)   | ![Light](./15dec4.png) |
+
+
+## Habits Screen Screenshots 16 december 2025
+| Empty State     | New Habit        | Colors for organization | Habits Overview        |
+|------------------------|------------------------|-------------------------|------------------------|
+| ![Light](./16dec1.png) | ![Light](./16dec2.png) |![Light](./16dec3.png)   | ![Light](./16dec4.png) |
+
+| Habit Stats      | Heatmap         | Edit & Delete | 
+|------------------------|------------------------|-------------------------|
+| ![Light](./16dec5.png) | ![Light](./16dec6.png) |![Light](./16dec7.png)   |
 
 
