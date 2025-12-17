@@ -33,7 +33,7 @@ struct MainHeaderView: View {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("Good Morning,")
                         .font(.caption)
-                        .foregroundColor(Color("AppAccent"))
+                        .foregroundStyle(.secondary)
                         .fontWeight(.medium)
                     
                     Text("\(name) 👋")
@@ -65,13 +65,10 @@ struct MainHeaderView: View {
                 }
             }
             .padding(.horizontal)
-            
-            Divider()
-                .background(Color.primary.opacity(0.8))
-                .padding(.horizontal, 20)
+        
         }
-        .padding(.top, 10)
-        .background(Color(UIColor.systemGray6))
+        .padding(.bottom, 10)
+        .background(.white)
     }
 }
 
