@@ -58,9 +58,14 @@ struct HomeView: View {
             Color(UIColor.systemGray6)
                 .ignoresSafeArea()
             
-            VStack (alignment: .leading, spacing: 15) {
+            VStack (alignment: .leading, spacing: 0) {
                 
-                MainHeaderView( name: "Sofia", isCalendarExpanded: $showCalendarView)
+                VStack{
+                    MainHeaderView( name: "Sofia", isCalendarExpanded: $showCalendarView)
+                }
+                .background(Color.white.ignoresSafeArea(edges: .top))
+                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
+                .zIndex(1)
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
@@ -84,11 +89,12 @@ struct HomeView: View {
                                         .foregroundStyle(Color(.secondaryLabel))
                                 }
                                 .id(showCalendarView ? "browsing" : "selected")
+                                .padding(.top, 20)
                             }
                             
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.bottom, 5)
+                        .padding(.bottom, 15)
                     }
                     //.padding(.horizontal)
                     .frame(maxWidth: .infinity, alignment: .leading)
