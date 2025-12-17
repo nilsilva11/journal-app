@@ -28,9 +28,14 @@ struct TrackerView: View {
                     .ignoresSafeArea()
                 
                 
-                VStack (alignment: .leading, spacing: 15) {
+                VStack (alignment: .leading, spacing: 0) {
                     
-                    MainHeaderView( name: "Sofia")
+                    VStack{
+                        MainHeaderView( name: "Sofia")
+                    }
+                    .background(Color.white.ignoresSafeArea(edges: .top))
+                    .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
+                    .zIndex(1)
                     
                     ScrollView {
                         VStack(alignment: .leading, spacing: 15) {
@@ -48,12 +53,14 @@ struct TrackerView: View {
                                 
                                 HStack(alignment: .center, spacing: 5) {
                                     
-                                    Text(Date().formatted(.dateTime.weekday(.wide)) + ", " + Date().formatted(.dateTime.day()))
-                                        .font(.headline)
+                                    Text("Daily Habits")
+                                        .font(.title2)
                                         .fontWeight(.semibold)
-                                        .foregroundStyle(Color(.secondaryLabel))
                                 }
-                                .frame(maxWidth: .infinity)
+                                .padding(.horizontal)
+                                .padding(.top, 20)
+                                
+                                DailyHabitsRow()
                                 
                                 Picker("View Type", selection: $selectedViewType) {
                                     ForEach(viewTypes, id: \.self) { type in
@@ -79,7 +86,7 @@ struct TrackerView: View {
                                         .foregroundStyle(.secondary)
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.top, 100)
+                                .padding(.top, 120)
                                 
                                 
                             } else {
