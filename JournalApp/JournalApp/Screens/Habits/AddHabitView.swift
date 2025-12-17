@@ -121,17 +121,8 @@ struct AddHabitView: View {
                 Section {
                     DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
                         .tint(selectedColor)
-    
-                                    
-                    Toggle("Set End Date", isOn: $hasEndDate)
-                        .tint(selectedColor)
                     
-                                    
-                    if hasEndDate {
-                        DatePicker("End Date", selection: $endDate, in: startDate..., displayedComponents: .date)
-                            .tint(selectedColor)
-                        
-                    }
+
                 } header: {
                     Text("Duration")
     
