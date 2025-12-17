@@ -105,7 +105,7 @@ struct HabitHeatmapCard: View {
     }
     
 
-    func getDateForGrid(col: Int, row: Int) -> Date {
+    private func getDateForGrid(col: Int, row: Int) -> Date {
         let calendar = Calendar.current
         let today = Date()
         let weeksAgo = (columns - 1) - col
@@ -119,12 +119,12 @@ struct HabitHeatmapCard: View {
         return finalDate
     }
     
-    func getDayLabel(index: Int) -> String {
+    private func getDayLabel(index: Int) -> String {
         let labels = ["S","M", "T", "W", "T", "F", "S"]
         return labels[index]
     }
     
-    func getFrequencyText() -> String {
+    private func getFrequencyText() -> String {
         if habit.frequency.count == 7 { return "Everyday" }
         return "\(habit.frequency.count) days/week"
     }

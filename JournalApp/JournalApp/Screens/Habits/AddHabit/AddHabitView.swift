@@ -12,51 +12,30 @@ struct AddHabitView: View {
     @Environment(\.dismiss) var dismiss
     @Environment(\.modelContext) var modelContext
     
-    var habitToEdit: Habit?
+    @State private var vm: AddHabitViewModel
     
-    @State private var title: String = ""
-    @State private var icon: String = "📝"
-    @State private var selectedColor: Color = Color("AppAccent")
-    
-    @State private var selectedDays: Set<Int> = [1, 2, 3, 4, 5, 6, 7]
-    @State private var startDate: Date = Date()
-    @State private var hasEndDate: Bool = false
-    @State private var endDate: Date = Date().addingTimeInterval(86400 * 30)
-    
-    let colors: [Color] = [
-        Color("AppAccent"),Color("Pink1"), Color("Completed"), Color("Green1"), Color("Delete"), Color("Orange1"),Color("Yellow1"), Color("Grey1")
-    ]
-    
-    let weekDays = [
-        (id: 2, label: "M"), (id: 3, label: "T"), (id: 4, label: "W"),
-        (id: 5, label: "T"), (id: 6, label: "F"), (id: 7, label: "S"), (id: 1, label: "S")
-    ]
+    init(habitToEdit: Habit?) {
+        _vm = State(initialValue: AddHabitViewModel(habitToEdit: habitToEdit))
+    }
 
     var body: some View {
         NavigationStack {
             Form {
-    
+                
                 VStack(spacing: 10) {
                     ZStack {
-                        
                         Circle()
-                            
                             .stroke(Color(.gray), lineWidth: 1)
                             .fill(.white)
                             .frame(width: 120, height: 120)
-                            //.shadow(color: selectedColor.opacity(0.3), radius: 15, x: 0, y: 10)
                         
-                        TextField("", text: $icon)
+                        TextField("", text: $vm.icon)
                             .font(.system(size: 75))
                             .multilineTextAlignment(.center)
                             .frame(width: 100, height: 100)
-
                             .background(Color.clear)
-                            .onChange(of: icon) { _, newValue in
-                                
-                                if newValue.count > 1 {
-                                    icon = String(newValue.prefix(1))
-                                }
+                            .onChange(of: vm.icon) { _, newValue in
+                                vm.handleIconChange(newValue)
                             }
                     }
                     .padding(.top, 20)
@@ -72,15 +51,14 @@ struct AddHabitView: View {
                 
 
                 Section("Habit Name") {
-                    TextField("e.g. Morning Meditation", text: $title)
+                    TextField("e.g. Morning Meditation", text: $vm.title)
                         .font(.headline)
                         .padding(.vertical, 8)
                 }
                 
                 Section {
                     HStack(spacing: 0) {
-                        ForEach(weekDays, id: \.id) { day in
-                
+                        ForEach(vm.weekDays, id: \.id) { day in
                             Text(day.label)
                                 .font(.subheadline)
                                 .fontWeight(.semibold)
@@ -88,50 +66,49 @@ struct AddHabitView: View {
                                 .frame(height: 40)
                                 .background(
                                     ZStack {
-                                        if selectedDays.contains(day.id) {
-                                            Circle().fill(selectedColor)
+                                        if vm.selectedDays.contains(day.id) {
+                                            Circle().fill(vm.selectedColor)
                                         } else {
                                             Circle().fill(Color(UIColor.systemGray5))
                                         }
-                                        
                                     }
                                 )
-                                .foregroundColor(selectedDays.contains(day.id) ? .white : .primary)
+                                .foregroundColor(vm.selectedDays.contains(day.id) ? .white : .primary)
                                 .clipShape(Circle())
                                 .onTapGesture {
                                     withAnimation(.spring(response: 0.3)) {
-                                        if selectedDays.contains(day.id) {
-
-                                            if selectedDays.contains(day.id){
-                                                selectedDays.remove(day.id)
-                                            }
+                                        if vm.selectedDays.contains(day.id) {
+                                            vm.selectedDays.remove(day.id)
                                         } else {
-                                            selectedDays.insert(day.id)
+                                            vm.selectedDays.insert(day.id)
                                         }
                                     }
                                 }
                         }
                     }
                     .padding(.vertical, 5)
-                    
                 } header: {
                     Text("Repeat Days")
-                    
                 }
+                
                 Section {
-                    DatePicker("Start Date", selection: $startDate, displayedComponents: .date)
-                        .tint(selectedColor)
+                    DatePicker("Start Date", selection: $vm.startDate, displayedComponents: .date)
+                        .tint(vm.selectedColor)
                     
-
+                    /*
+                    Toggle("Set End Date", isOn: $vm.hasEndDate)
+                    if vm.hasEndDate {
+                        DatePicker("End Date", selection: $vm.endDate, displayedComponents: .date)
+                    }
+                    */
                 } header: {
                     Text("Duration")
-    
                 }
                 
-                
+
                 Section("Color") {
                     LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 4), spacing: 20) {
-                        ForEach(colors, id: \.self) { color in
+                        ForEach(vm.colors, id: \.self) { color in
                             ZStack {
                                 Circle()
                                     .fill(color)
@@ -139,11 +116,11 @@ struct AddHabitView: View {
                                     .shadow(color: .black.opacity(0.1), radius: 2, x: 0, y: 1)
                                     .onTapGesture {
                                         withAnimation(.spring()) {
-                                            selectedColor = color
+                                            vm.selectedColor = color
                                         }
                                     }
                                 
-                                if selectedColor == color {
+                                if vm.selectedColor == color {
                                     Image(systemName: "checkmark")
                                         .foregroundColor(.white)
                                         .font(.headline)
@@ -156,26 +133,25 @@ struct AddHabitView: View {
                 }
             }
             .scrollContentBackground(.hidden)
-            //Blobs
+            //blobs
             .background(
                 ZStack {
                     Color(UIColor.systemGray6).ignoresSafeArea()
-    
+                    
                     Circle()
-                        .fill(selectedColor.opacity(0.5))
+                        .fill(vm.selectedColor.opacity(0.5))
                         .frame(width: 300, height: 300)
                         .blur(radius: 150)
                         .offset(x: -100, y: -200)
                     
-                    
                     Circle()
-                        .fill(selectedColor.opacity(0.5))
+                        .fill(vm.selectedColor.opacity(0.5))
                         .frame(width: 250, height: 250)
                         .blur(radius: 120)
                         .offset(x: 100, y: 300)
                 }
             )
-            .navigationTitle(habitToEdit == nil ? "New Habit" : "Edit Habit")
+            .navigationTitle(vm.habitToEdit == nil ? "New Habit" : "Edit Habit")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
@@ -183,64 +159,19 @@ struct AddHabitView: View {
                 }
                 
                 ToolbarItem(placement: .confirmationAction) {
-                    Button(habitToEdit == nil ? "Create" : "Save") {
-                        saveHabit()
+                    Button(vm.habitToEdit == nil ? "Create" : "Save") {
+                        vm.save(context: modelContext) 
+                        dismiss()
                     }
                     .fontWeight(.semibold)
-                    .disabled(title.isEmpty || icon.isEmpty) 
-                }
-            }
-            .onAppear {
-                if let habit = habitToEdit {
-                    title = habit.title
-                    icon = habit.icon
-                    selectedColor = Color(hex: habit.colorHex)
-                    selectedDays = Set(habit.frequency)
-                    startDate = habit.startDate
-                    if let end = habit.endDate {
-                        endDate = end
-                        hasEndDate = true
-                    }
+                    .disabled(!vm.isValid)
                 }
             }
         }
-    }
-    
-    func saveHabit() {
-        let hexColor = selectedColor.toHex() ?? "#8E44AD"
-        let finalIcon = icon.isEmpty ? "✨" : icon
-        let frequencyArray = Array(selectedDays)
-        let finalEndDate = hasEndDate ? endDate : nil
-        
-        if let habit = habitToEdit {
-                    
-            habit.title = title
-            habit.icon = finalIcon
-            habit.colorHex = hexColor
-            habit.frequency = frequencyArray
-            habit.startDate = startDate
-            habit.endDate = finalEndDate
-                    
-        } else {
-            
-            let newHabit = Habit(
-                title: title,
-                icon: finalIcon,
-                colorHex: hexColor,
-                frequency: frequencyArray,
-                startDate: startDate,
-                endDate: finalEndDate
-            )
-            modelContext.insert(newHabit)
-            
-        }
-        
-        dismiss()
-        
     }
 }
 
 #Preview {
-    AddHabitView()
+    AddHabitView(habitToEdit: nil)
         .modelContainer(for: Habit.self, inMemory: true)
 }

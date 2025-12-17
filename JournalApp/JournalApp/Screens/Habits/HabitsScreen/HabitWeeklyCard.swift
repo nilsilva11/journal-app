@@ -122,7 +122,7 @@ struct HabitWeeklyCard: View {
         .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
     }
     
-    func getDaysForWeek(index: Int) -> [Date] {
+    private func getDaysForWeek(index: Int) -> [Date] {
         let calendar = Calendar.current
         let weeksAgo = index - historyWeeks
         guard let baseDate = calendar.date(byAdding: .weekOfYear, value: weeksAgo, to: Date()) else { return [] }
@@ -131,7 +131,7 @@ struct HabitWeeklyCard: View {
         }
     }
 
-    func getDateRangeText(for index: Int) -> String {
+    private func getDateRangeText(for index: Int) -> String {
         if index == historyWeeks {
             return "Last 7 Days"
         }
