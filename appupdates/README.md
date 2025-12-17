@@ -76,4 +76,9 @@ Month View | Date Picker |
 |------------------------|------------------------|-------------------------|
 | ![Light](./16dec5.png) | ![Light](./16dec6.png) |![Light](./16dec7.png)   |
 
+## Habits Screen Screenshots 17 december 2025
+| Weekly View | Expanded View |
+|------------|------------|
+|![Light](./17dec1.png) |![Light](./17dec2.png) |
+
 
