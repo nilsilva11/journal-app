@@ -13,7 +13,7 @@ struct HabitHeatmapCard: View {
     var onDelete: () -> Void
     
     
-    let rows = 5
+    let rows = 7
     let columns = 20
     let dotSize: CGFloat = 11
     let spacing: CGFloat = 5
@@ -39,7 +39,7 @@ struct HabitHeatmapCard: View {
                         .font(.headline)
                         .fontWeight(.bold)
                     
-                    Text(getFrequencyText())
+                    Text("Last 20 weeks")
                         .font(.caption)
                         .foregroundStyle(.secondary)
                 }
@@ -120,7 +120,7 @@ struct HabitHeatmapCard: View {
     }
     
     func getDayLabel(index: Int) -> String {
-        let labels = ["M", "T", "W", "T", "F", "S", "S"]
+        let labels = ["S","M", "T", "W", "T", "F", "S"]
         return labels[index]
     }
     

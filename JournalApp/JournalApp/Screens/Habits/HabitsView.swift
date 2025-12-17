@@ -9,7 +9,10 @@ import SwiftUI
 import SwiftData
 
 struct TrackerView: View {
+    
     @Environment(\.modelContext) private var modelContext
+    @State private var selectedViewType: String = "Weekly"
+    let viewTypes = ["Weekly", "Expanded"]
     
     @Query(sort: \Habit.createdAt, order: .reverse) var habits: [Habit]
     @State private var showAddSheet: Bool = false
@@ -32,14 +35,35 @@ struct TrackerView: View {
                     ScrollView {
                         VStack(alignment: .leading, spacing: 15) {
                             
-                            VStack (alignment: .leading, spacing: -10){
+                            /*VStack (alignment: .leading, spacing: -10){
                                 Text("Habits")
                                 Text("Tracker")
                                     .foregroundColor(Color("AppAccent"))
                             }
                             .font(.system(size: 48)).bold()
                             .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding(.horizontal)
+                            .padding(.horizontal)*/
+                            
+                            if !habits.isEmpty {
+                                
+                                HStack(alignment: .center, spacing: 5) {
+                                    
+                                    Text(Date().formatted(.dateTime.weekday(.wide)) + ", " + Date().formatted(.dateTime.day()))
+                                        .font(.headline)
+                                        .fontWeight(.semibold)
+                                        .foregroundStyle(Color(.secondaryLabel))
+                                }
+                                .frame(maxWidth: .infinity)
+                                
+                                Picker("View Type", selection: $selectedViewType) {
+                                    ForEach(viewTypes, id: \.self) { type in
+                                        Text(type)
+                                    }
+                                }
+                                .pickerStyle(.segmented)
+                                .padding(.horizontal)
+                                .padding(.bottom, 5)
+                            }
                             
                             if habits.isEmpty {
                                 
@@ -55,7 +79,7 @@ struct TrackerView: View {
                                         .foregroundStyle(.secondary)
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.top, 50)
+                                .padding(.top, 100)
                                 
                                 
                             } else {
@@ -63,23 +87,26 @@ struct TrackerView: View {
                                 LazyVStack(spacing: 20) {
                                     ForEach(habits) { habit in
                                         NavigationLink(destination: HabitDetailView(habit: habit)) {
-                                                    
-                                                    HabitHeatmapCard(
-                                                        habit: habit,
-                                                        onEdit: {
-                                                            habitToEdit = habit
-                                                            showAddSheet = true
-                                                        },
-                                                        onDelete: {
-                                                            withAnimation {
-                                                                modelContext.delete(habit)
-                                                            }
-                                                        }
-                                                    )
-                                                }
-                                        
-                                                .buttonStyle(.plain)
+                                            
+                                            if selectedViewType == "Expanded" {
+                                                
+                                                HabitHeatmapCard(
+                                                    habit: habit,
+                                                    onEdit: { habitToEdit = habit; showAddSheet = true },
+                                                    onDelete: { withAnimation { modelContext.delete(habit) } }
+                                                )
+                                            } else {
+                                                
+                                                HabitWeeklyCard(
+                                                    habit: habit,
+                                                    onEdit: { habitToEdit = habit; showAddSheet = true },
+                                                    onDelete: { withAnimation { modelContext.delete(habit) } }
+                                                )
                                             }
+                                            
+                                        }
+                                        .buttonStyle(.plain)
+                                    }
                                 }
                                 .padding(.horizontal)
                                 .padding(.bottom, 100)
