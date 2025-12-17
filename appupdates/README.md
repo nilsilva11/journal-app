@@ -81,4 +81,7 @@ Month View | Date Picker |
 |------------|------------|
 |![Light](./17dec1.png) |![Light](./17dec2.png) |
 
+| Weekly View + rings    | Overall View + rings       | Habit Details | Habit Details       |
+|------------------------|------------------------|-------------------------|------------------------|
+| ![Light](./17dec3.png) | ![Light](./17dec4.png) |![Light](./17dec5.png)   | ![Light](./17dec6.png) |
 
