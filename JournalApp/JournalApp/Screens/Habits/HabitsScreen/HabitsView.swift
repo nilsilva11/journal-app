@@ -21,14 +21,12 @@ struct TrackerView: View {
                 Color(UIColor.systemGray6)
                     .ignoresSafeArea()
                 
-                VStack (alignment: .leading, spacing: 0) {
+                ZStack(alignment: .top) {
                     
-                    VStack{
-                        MainHeaderView(name: "Sofia")
-                    }
-                    .background(Color.white.ignoresSafeArea(edges: .top))
-                    .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
-                    .zIndex(1)
+                    
+                    MainHeaderView(name: "Sofia")
+                        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
+                        .zIndex(1)
                     
                     ScrollView {
                         VStack(alignment: .leading, spacing: 15) {
@@ -36,11 +34,11 @@ struct TrackerView: View {
                             if !habits.isEmpty {
                                 HStack(alignment: .center, spacing: 5) {
                                     Text("Daily Habits")
-                                        .font(.title2)
+                                        .font(.title)
                                         .fontWeight(.semibold)
                                 }
                                 .padding(.horizontal)
-                                .padding(.top, 20)
+                                .padding(.top, 70)
                                 
                                 DailyHabitsRow()
                                 
@@ -68,7 +66,7 @@ struct TrackerView: View {
                                         .foregroundStyle(.secondary)
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.top, 120)
+                                .padding(.top, 170)
                                 
                             } else {
                                 

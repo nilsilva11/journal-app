@@ -111,7 +111,7 @@ struct HabitHeatmapCard: View {
         let weeksAgo = (columns - 1) - col
         let weekday = calendar.component(.weekday, from: today)
         
-        guard let startOfWeek = calendar.date(byAdding: .day, value: -(weekday - 2), to: today),
+        guard let startOfWeek = calendar.date(byAdding: .day, value: -(weekday - 1), to: today),
               let weekBase = calendar.date(byAdding: .weekOfYear, value: -weeksAgo, to: startOfWeek),
               let finalDate = calendar.date(byAdding: .day, value: row, to: weekBase)
         else { return Date() }

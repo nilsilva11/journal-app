@@ -58,12 +58,11 @@ struct HomeView: View {
             Color(UIColor.systemGray6)
                 .ignoresSafeArea()
             
-            VStack (alignment: .leading, spacing: 0) {
+            ZStack(alignment: .top) {
                 
                 VStack{
                     MainHeaderView( name: "Sofia", isCalendarExpanded: $showCalendarView)
                 }
-                .background(Color.white.ignoresSafeArea(edges: .top))
                 .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
                 .zIndex(1)
                 
@@ -76,7 +75,7 @@ struct HomeView: View {
                         HStack(alignment: .center) {
                             
 
-                            //month title
+                            //day
                             Button(action: {
                                 viewModel.resetToToday()
                                 browsingMonth = Date()
@@ -94,6 +93,7 @@ struct HomeView: View {
                             
                         }
                         .frame(maxWidth: .infinity)
+                        .padding(.top, 60)
                         .padding(.bottom, 15)
                     }
                     //.padding(.horizontal)

@@ -39,12 +39,11 @@ struct GoalsView: View {
                 .ignoresSafeArea()
             
             
-            VStack (alignment: .leading, spacing: 0) {
+            ZStack(alignment: .top) {
                 
                 VStack{
                     MainHeaderView( name: "Sofia")
                 }
-                .background(Color.white.ignoresSafeArea(edges: .top))
                 .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
                 .zIndex(1)
                 
@@ -60,7 +59,7 @@ struct GoalsView: View {
                         .font(.system(size: 48)).bold()
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.horizontal)
-                        .padding(.top, 15)
+                        .padding(.top, 60)
                         
                         HStack {
                             
