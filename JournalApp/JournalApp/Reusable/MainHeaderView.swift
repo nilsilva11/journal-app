@@ -68,7 +68,7 @@ struct MainHeaderView: View {
         
         }
         .padding(.bottom, 10)
-        .background(.white)
+        .background(.ultraThinMaterial)
     }
 }
 
