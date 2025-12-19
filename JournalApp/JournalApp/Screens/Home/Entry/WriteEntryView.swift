@@ -77,9 +77,8 @@ struct WriteEntryView: View {
 
 #Preview {
     WriteEntryView(
-        date: Date(), // Passamos a data de hoje
+        date: Date(),
         onSave: { title, text in
-            // Isto é apenas um teste, não precisa de fazer nada real
             print("Título: \(title), Texto: \(text)")
         }
     )

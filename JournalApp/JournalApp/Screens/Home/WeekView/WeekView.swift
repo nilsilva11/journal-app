@@ -16,7 +16,7 @@ struct WeekView: View {
     
     
     var body: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 5) {
             
             /*VStack(spacing: 4) {
                 Image(systemName: "checkmark.circle.fill")

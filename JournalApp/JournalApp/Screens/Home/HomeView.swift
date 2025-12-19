@@ -61,13 +61,33 @@ struct HomeView: View {
             ZStack(alignment: .top) {
                 
                 VStack{
-                    MainHeaderView( name: "Sofia", isCalendarExpanded: $showCalendarView)
+                    UniversalHeaderView(
+                        showDate: false,
+                        isCalendarExpanded: $showCalendarView
+                    )
                 }
-                .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
                 .zIndex(1)
                 
                 ScrollView {
+                    
+                    
                     VStack(alignment: .leading, spacing: 20) {
+                        
+                        Spacer().frame(height: 70)
+                        
+                        VStack(alignment: .leading, spacing: 0) {
+                            
+                            Text(Date().formatted(.dateTime.weekday(.wide)) + ", " + Date().formatted(.dateTime.day()))
+                                .font(.system(size: 25, weight: .regular))
+                                .foregroundColor(.secondary)
+                            HStack(alignment: .firstTextBaseline) {
+                                Text("Daily Thoughts")
+                                    .font(.system(size: 32, weight: .medium))
+                                    .foregroundColor(.primary)
+                                
+                            }
+                        }
+                        .padding(.horizontal, 20)
                         
                         
                         
@@ -75,26 +95,10 @@ struct HomeView: View {
                         HStack(alignment: .center) {
                             
 
-                            //day
-                            Button(action: {
-                                viewModel.resetToToday()
-                                browsingMonth = Date()
-                            }) {
-                                HStack(spacing: 5) {
-                                    
-                                    Text(Date().formatted(.dateTime.weekday(.wide)) + ", " + Date().formatted(.dateTime.day()))
-                                        .font(.headline)
-                                        .fontWeight(.semibold)
-                                        .foregroundStyle(Color(.secondaryLabel))
-                                }
-                                .id(showCalendarView ? "browsing" : "selected")
-                                .padding(.top, 20)
-                            }
                             
                         }
                         .frame(maxWidth: .infinity)
-                        .padding(.top, 60)
-                        .padding(.bottom, 15)
+
                     }
                     //.padding(.horizontal)
                     .frame(maxWidth: .infinity, alignment: .leading)
@@ -127,7 +131,7 @@ struct HomeView: View {
                                 }
                             }
                             .frame(width: 45)
-                            .padding(.leading, 10)
+                            .padding(.leading, 20)
     
                             TabView(selection: $viewModel.weekIndex) {
                                 ForEach(0..<3) { index in

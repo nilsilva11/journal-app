@@ -24,23 +24,38 @@ struct TrackerView: View {
                 ZStack(alignment: .top) {
                     
                     
-                    MainHeaderView(name: "Sofia")
-                        .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 5)
-                        .zIndex(1)
+                    VStack{
+                        UniversalHeaderView(
+                            showDate: false,
+                        )
+                    }
+                    .zIndex(1)
                     
                     ScrollView {
                         VStack(alignment: .leading, spacing: 15) {
                             
-                            if !habits.isEmpty {
-                                HStack(alignment: .center, spacing: 5) {
+                            Spacer().frame(height: 10)
+                            
+                            VStack(alignment: .leading, spacing: 0) {
+                                
+                                Text("Sofia")
+                                    .font(.system(size: 25, weight: .regular))
+                                    .foregroundColor(.secondary)
+                                
+                                HStack(alignment: .firstTextBaseline) {
                                     Text("Daily Habits")
-                                        .font(.title)
-                                        .fontWeight(.semibold)
+                                        .font(.system(size: 32, weight: .medium))
+                                        .foregroundColor(.primary)
+                                    
                                 }
-                                .padding(.horizontal)
-                                .padding(.top, 70)
+                            }
+                            .padding(.horizontal, 15)
+                            .padding(.top, 60)
+                            
+                            if !habits.isEmpty {
                                 
                                 DailyHabitsRow()
+                                
                                 
                                 Picker("View Type", selection: $vm.selectedViewType) {
                                     ForEach(vm.viewTypes, id: \.self) { type in
@@ -54,19 +69,42 @@ struct TrackerView: View {
                             
                             if habits.isEmpty {
 
+
                                 VStack(spacing: 5) {
                                     Image("Journal")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(height: 250)
-                                    Text("No habits yet")
-                                        .font(.headline)
-                                    Text("Tap + to start your journey")
+                                        .frame(height: 240)
+                                    HStack {
+                                        Text("Your Habits List is")
+                                            .font(.title2)
+                                            .fontWeight(.regular)
+                                        
+                                        Text("Empty")
+                                            .foregroundStyle(Color("AppAccent"))
+                                            .font(.title2)
+                                            .fontWeight(.bold)
+                                    }
+                                        
+                                    Text("Start tracking your habits!")
                                         .font(.subheadline)
-                                        .foregroundStyle(.secondary)
+                                        .foregroundStyle(Color(.secondaryLabel))
+                                    Button(action: {
+                                                vm.showAddSheet = true
+                                    }) {
+                                        Text("Create Habit")
+                                            .font(.headline)
+                                            .fontWeight(.semibold)
+                                            .foregroundStyle(.white)
+                                            .frame(width: 200, height: 50)
+                                            .background(Color("AppAccent"))
+                                            .clipShape(Capsule())
+                                            .shadow(color: Color("AppAccent").opacity(0.4), radius: 10, x: 0, y: 5)
+                                    }
+                                            .padding(.top, 10)
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.top, 170)
+                                .padding(.top, 90)
                                 
                             } else {
                                 
@@ -96,22 +134,6 @@ struct TrackerView: View {
                                 .padding(.bottom, 100)
                             }
                         }
-                    }
-                    
-                    .safeAreaInset(edge: .bottom, alignment: .trailing) {
-                        Button(action: {
-                            vm.startCreating()
-                        }) {
-                            Image(systemName: "plus")
-                                .font(.title2.bold())
-                                .foregroundColor(.white)
-                                .frame(width: 56, height: 56)
-                                .background(Color("AppAccent"))
-                                .clipShape(Circle())
-                                .shadow(color: .black.opacity(0.3), radius: 4, x: 0, y: 4)
-                        }
-                        .padding(.trailing, 20)
-                        .padding(.bottom, 30)
                     }
                     .contentMargins(.bottom, 70, for: .scrollContent)
                 }
