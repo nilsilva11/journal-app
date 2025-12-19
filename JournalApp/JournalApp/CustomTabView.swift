@@ -6,70 +6,116 @@
 //
 
 import SwiftUI
-import UIKit
+import SwiftData
+
+enum Tab: String, CaseIterable {
+    case habits = "list"
+    case home = "Home"
+    case goals = "goal"
+}
 
 struct CustomTabView: View {
-    @Binding var selectedTab: Int
     
-    init(selectedTab: Binding<Int>) {
-        self._selectedTab = selectedTab
-        
-        //create config
-        let appearance = UITabBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        
-        //normal icon color
-        appearance.stackedLayoutAppearance.normal.iconColor = UIColor.progressCard
-        appearance.stackedLayoutAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.progressCard]
-        
-        // 3. Definir a cor para o estado SELECIONADO -> EntryBall
-        // Nota: Temos de usar UIColor(named:) porque estamos no contexto do UIKit aqui
-        let selectedColor = UIColor(named: "AppAccent") ?? UIColor.systemBlue
-        
-        appearance.stackedLayoutAppearance.selected.iconColor = selectedColor
-        appearance.stackedLayoutAppearance.selected.titleTextAttributes = [.foregroundColor: selectedColor]
-        
-        // 4. Aplicar a configuração à TabBar global
-        UITabBar.appearance().standardAppearance = appearance
-        UITabBar.appearance().scrollEdgeAppearance = appearance
-        
-    }
+    @Environment(\.modelContext) private var modelContext
+    
+    @State private var selectedTab: Tab = .home
 
-
+    @State private var showHabitSheet = false
+    @State private var showEntrySheet = false
+    @State private var showGoalSheet = false
+    
     var body: some View {
-        
-        TabView(selection: $selectedTab) {
-            NavigationStack {
-                TrackerView()
+        ZStack {
+            
+            Group {
+                switch selectedTab {
+                case .habits:
+                    TrackerView()
+                case .home:
+                    HomeView()
+                case .goals:
+                    GoalsView()
+                }
             }
-            .tabItem {
-                Image(systemName: "list.bullet.clipboard.fill")
-                Text("Habits")
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            
+            VStack {
+                Spacer()
+                
+                HStack(alignment: .bottom, spacing: 110) {
+                    
+                    FloatingTabBarView(selectedTab: $selectedTab)
+                    
+                    Button(action: {
+                        handleFabTap()
+                    }) {
+                        Image(systemName: "plus")
+                            .font(.title2.bold())
+                            .foregroundColor(.white)
+                            .frame(width: 60, height: 60)
+                            .background(Color("AppAccent"))
+                            .clipShape(Circle())
+                            .shadow(color: .black.opacity(0.3), radius: 8, x: 0, y: 4)
+                    }
+                }
+                .padding(.bottom, 10)
+                .padding(.horizontal, 25)
             }
-            .tag(0)
-
-            NavigationStack {
-                HomeView()
-            }
-            .tabItem {
-                Image(systemName: "house.fill")
-                Text("Home")
-            }
-            .tag(1)
-
-            NavigationStack {
-                GoalsView()
-            }
-            .tabItem {
-                Image(systemName: "target")
-                Text("Goals")
-            }
-            .tag(2)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
-        .tint(Color("EntryBall"))
+        
+        .sheet(isPresented: $showHabitSheet) {
+            AddHabitView(habitToEdit: nil)
+        }
+        .sheet(isPresented: $showEntrySheet) {
+            WriteEntryView(
+                entryToEdit: nil,
+                date: Date(),     
+                onSave: { title, text in
+                    let newEntry = DailyEntry(
+                        date: Date(),
+                        title: title,
+                        text: text
+                    )
+                    modelContext.insert(newEntry)
+                    try? modelContext.save()
+                    showEntrySheet = false
+                }
+            )
+        }
+        .sheet(isPresented: $showGoalSheet) {
+            AddGoalView(
+                    goalToEdit: nil,
+                    onSave: { text, subtext in
+                        
+                        let newGoal = Goal(
+                            text: text,
+                            subtext: subtext,
+                            isCompleted: false
+                        )
+                        
+                        modelContext.insert(newGoal)
+                        showGoalSheet = false
+                    }
+                )
+                .presentationDetents([.height(400)])
+        }
     }
+    
+    func handleFabTap() {
+        switch selectedTab {
+        case .habits:
+            showHabitSheet = true
+        case .home:
+            showEntrySheet = true
+        case .goals:
+            showGoalSheet = true
+        }
+    }
+    
 }
 
 #Preview {
-    CustomTabView(selectedTab: .constant(1))
+    CustomTabView()
 }
+
