@@ -105,7 +105,7 @@ Month View | Date Picker |
 - Goals Screen feature completed, still need to work on the UI
 - Home Screen 90% completed, just need to add daily habits rings
 - What's next?
-    On Boarding Screens
-    App Icon
+    On Boarding Screens -
+    App Icon -
     User profile
 
