@@ -50,7 +50,7 @@ struct TrackerView: View {
                                 }
                             }
                             .padding(.horizontal, 15)
-                            .padding(.top, 60)
+                            .padding(.top, 55)
                             
                             if !habits.isEmpty {
                                 
@@ -104,7 +104,7 @@ struct TrackerView: View {
                                             .padding(.top, 10)
                                 }
                                 .frame(maxWidth: .infinity)
-                                .padding(.top, 90)
+                                .padding(.top, 65)
                                 
                             } else {
                                 

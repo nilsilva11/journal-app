@@ -73,7 +73,7 @@ struct HomeView: View {
                     
                     VStack(alignment: .leading, spacing: 20) {
                         
-                        Spacer().frame(height: 70)
+                        Spacer().frame(height: 65)
                         
                         VStack(alignment: .leading, spacing: 0) {
                             
@@ -87,17 +87,7 @@ struct HomeView: View {
                                 
                             }
                         }
-                        .padding(.horizontal, 20)
-                        
-                        
-                        
-                        // --- QUICK DAYS NAVIGATOR ---
-                        HStack(alignment: .center) {
-                            
-
-                            
-                        }
-                        .frame(maxWidth: .infinity)
+                        .padding(.horizontal, 15)
 
                     }
                     //.padding(.horizontal)

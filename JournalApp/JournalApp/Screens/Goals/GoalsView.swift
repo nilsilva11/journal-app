@@ -52,7 +52,7 @@ struct GoalsView: View {
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
                         
-                        Spacer().frame(height: 10)
+                        Spacer().frame(height: 5)
                         
                         VStack(alignment: .leading, spacing: 0) {
                             
