@@ -97,3 +97,15 @@ Month View | Date Picker |
 |------------------------|------------------------|-------------------------|
 | ![Light](./20dec4.png) | ![Light](./20dec5.png) |![Light](./20dec6.png)   | 
 
+
+# App Status - 20th December 2025
+
+- Still some lil bugs to fix
+- Habits Screen 99% complete
+- Goals Screen feature completed, still need to work on the UI
+- Home Screen 90% completed, just need to add daily habits rings
+- What's next?
+    On Boarding Screens
+    App Icon
+    User profile
+
