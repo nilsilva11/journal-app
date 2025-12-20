@@ -109,3 +109,12 @@ Month View | Date Picker |
     App Icon -
     User profile
 
+
+| Habits Empty State   | Add Habit | Habit Icons) | Add Habit |
+|------------------------|------------------------|-------------------------|-------------------------|
+| ![Light](./20dec12.png) | ![Light](./20dec22.png) |![Light](./20dec32.png)   | ![Light](./20dec42.png)   | 
+
+
+| Weekly Habits  | Expanded Habits | Home Screen  | Home Screen  |
+|------------------------|------------------------|-------------------------|-------------------------|
+| ![Light](./20dec52.png) | ![Light](./20dec62.png) |![Light](./20dec72.png)   | ![Light](./20dec82.png)   | 
