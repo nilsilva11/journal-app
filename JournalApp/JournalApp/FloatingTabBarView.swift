@@ -9,6 +9,7 @@ import SwiftUI
 
 struct FloatingTabBarView: View {
     @Binding var selectedTab: Tab
+    @Environment(\.colorScheme) var colorScheme
     
     @Namespace private var animation
     
@@ -44,7 +45,7 @@ struct FloatingTabBarView: View {
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 5)
-        .background(.white)
+        .background(colorScheme == .dark ? Color(hex: "111112") : Color(UIColor.secondarySystemGroupedBackground))
         .clipShape(Capsule())
         .shadow(color: .black.opacity(0.1), radius: 10, x: 0, y: 5)
     }
