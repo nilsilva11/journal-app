@@ -118,3 +118,18 @@ Month View | Date Picker |
 | Weekly Habits  | Expanded Habits | Home Screen  | Home Screen  |
 |------------------------|------------------------|-------------------------|-------------------------|
 | ![Light](./20dec52.png) | ![Light](./20dec62.png) |![Light](./20dec72.png)   | ![Light](./20dec82.png)   | 
+
+
+
+## Dark Mode (Goals Screen still needs some design work)
+| Home Screen       | Entries       | New Entry | Home Screen       |
+|------------------------|------------------------|-------------------------|------------------------|
+| ![Light](./darkmode1.png) | ![Light](./darkmode2.png) |![Light](./darkmode3.png)   | ![Light](./darkmode4.png) |
+
+| Home Screen Calendar        | Habits Weekly View       | Habits Expanded View | New Habit       |
+|------------------------|------------------------|-------------------------|------------------------|
+| ![Light](./darkmode5.png) | ![Light](./darkmode6.png) |![Light](./darkmode7.png)   | ![Light](./darkmode8.png) |
+
+| Habit Details       | Habit Details       | Goals Empty State | Add Goal       | Goals Screen      |
+|------------------------|------------------------|-------------------------|------------------------|------------------------|
+| ![Light](./darkmode9.png) | ![Light](./darkmode10.png) |![Light](./darkmode11.png)   | ![Light](./darkmode12.png) |![Light](./darkmode13.png) |
