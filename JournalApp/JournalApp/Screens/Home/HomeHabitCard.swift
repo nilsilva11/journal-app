@@ -12,6 +12,7 @@ struct HomeHabitCard: View {
     var habit: Habit
     var date: Date
     var onToggle: () -> Void
+    @Environment(\.colorScheme) var colorScheme
     
     var isCompleted: Bool {
         habit.isCompleted(on: date)
@@ -50,7 +51,12 @@ struct HomeHabitCard: View {
                 
                 ZStack {
                     Circle()
-                        .fill(isCompleted ? Color.white : Color.white.opacity(0.5))
+                        .fill(
+                            colorScheme == .dark
+                            ? (isCompleted ? Color.black.opacity(0.6) : Color.black.opacity(0.2))
+                            : (isCompleted ? Color.white : Color.white.opacity(0.5))
+                            
+                        )
                         .frame(width: 34, height: 34)
                         .shadow(color: .black.opacity(0.05), radius: 2, x: 0, y: 1)
                     

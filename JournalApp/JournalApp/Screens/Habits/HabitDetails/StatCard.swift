@@ -12,14 +12,16 @@ struct StatCard: View {
     let value: String
     let icon: String
     let color: Color
+    @Environment(\.colorScheme) var colorScheme
     
     var body: some View {
+        
         
 
         ZStack(alignment: .bottomLeading) {
             
             RoundedRectangle(cornerRadius: 20)
-                .fill(.white)
+                .fill(colorScheme == .dark ? Color.black.opacity(0.5) : Color(UIColor.secondarySystemGroupedBackground))
                 .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
             
             VStack(alignment: .leading, spacing: 5) {

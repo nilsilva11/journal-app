@@ -20,6 +20,7 @@ struct CalendarView: View {
     @Binding var selectedDate: Date
     @Binding var browsingMonth: Date
     @State private var viewModel = CalendarViewModel()
+    @Environment(\.colorScheme) var colorScheme
     
     //open month picker
     @State private var showDatePicker: Bool = false
@@ -81,6 +82,11 @@ struct CalendarView: View {
                     Image(systemName: "checkmark.circle.fill")
                         .font(.system(size: 18))
                         .foregroundColor(Color("EntryBall"))
+                        .background(
+                            Circle()
+                                .fill(Color.white)
+                                .padding(3)
+                        )
                     
                     Text("\(monthlyCount)")
                         .font(.headline)
@@ -191,7 +197,7 @@ struct CalendarView: View {
         }
         .padding()
         
-        .background(Color(UIColor.white))
+        .background(colorScheme == .dark ? Color.black.opacity(0.3) : Color(UIColor.secondarySystemGroupedBackground))
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: 5)
         .padding(.horizontal)

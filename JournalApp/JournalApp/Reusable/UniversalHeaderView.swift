@@ -56,7 +56,7 @@ struct UniversalHeaderView: View {
                                 .frame(width: 22, height: 22)
                                 .foregroundColor(.primary)
                                 .frame(width: 50, height: 50)
-                                .background(Color.white)
+                                .background(Color(UIColor.secondarySystemGroupedBackground))
                                 .clipShape(Circle())
                                 .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
                                 .overlay(

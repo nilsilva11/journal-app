@@ -11,7 +11,7 @@ struct HabitHeatmapCard: View {
     let habit: Habit
     var onEdit: () -> Void
     var onDelete: () -> Void
-    
+    @Environment(\.colorScheme) var colorScheme
     
     let rows = 7
     let columns = 20
@@ -28,8 +28,9 @@ struct HabitHeatmapCard: View {
             HStack {
                 ZStack {
                     Circle()
-                        .fill(.white.opacity(0.5))
+                        .fill(colorScheme == .dark ? Color.black.opacity(0.3) : Color(UIColor.secondarySystemGroupedBackground).opacity(0.6))
                         .frame(width: 40, height: 40)
+                    
                     Image(systemName: habit.icon)
                         .resizable()
                         .aspectRatio(contentMode: .fit)

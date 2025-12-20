@@ -22,6 +22,7 @@ struct HabitWeeklyCard: View {
     
     let historyWeeks = 52
     @State private var currentWeekIndex: Int = 52
+    @Environment(\.colorScheme) var colorScheme
     
     
     var body: some View {
@@ -30,7 +31,7 @@ struct HabitWeeklyCard: View {
             HStack {
                 ZStack {
                     Circle()
-                        .fill(Color(.white).opacity(0.6))
+                        .fill(colorScheme == .dark ? Color.black.opacity(0.3) : Color(UIColor.secondarySystemGroupedBackground).opacity(0.6))
                         .frame(width: 40, height: 40)
                     Image(systemName: habit.icon)
                         .resizable()

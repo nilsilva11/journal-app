@@ -10,6 +10,7 @@ import SwiftData
 
 struct YearlyHeatmapView: View {
     var habit: Habit
+    @Environment(\.colorScheme) var colorScheme
     
     
     var calendarDays: [Date] {
@@ -29,10 +30,6 @@ struct YearlyHeatmapView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            
-            Text("Yearly Progress")
-                .font(.headline)
-                .padding(.horizontal)
 
             ScrollViewReader { proxy in
                 ScrollView(.horizontal, showsIndicators: false) {
@@ -64,12 +61,12 @@ struct YearlyHeatmapView: View {
                     }
                 }
             }
-            .background(.white)
+            .background(colorScheme == .dark ? Color.black.opacity(0.5) : Color(UIColor.secondarySystemGroupedBackground))
             .cornerRadius(16)
             .padding(.horizontal)
         }
         .padding(.vertical, 20)
-        .background(Color.white)
+        .background(colorScheme == .dark ? Color.black.opacity(0.5) : Color(UIColor.secondarySystemGroupedBackground))
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
         .padding(.horizontal)

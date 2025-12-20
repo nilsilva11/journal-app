@@ -14,6 +14,7 @@ struct HomeView: View {
     @State private var viewModel = HomeViewModel()
     @State private var showCalendarView: Bool = false
     @Query var allHabits: [Habit]
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var browsingMonth: Date = Date()
     @State private var activeSheet: SheetConfig?
@@ -99,8 +100,14 @@ struct HomeView: View {
                     
                     if showCalendarView {
                         //Calendar View
-                        CalendarView(selectedDate: $viewModel.selectedDate, browsingMonth: $browsingMonth, entries: allEntries)
-                        journalSection
+                        VStack(spacing: 25) {
+                            CalendarView(selectedDate: $viewModel.selectedDate, browsingMonth: $browsingMonth, entries: allEntries)
+                            journalSection
+                        }
+                        .padding(.top, 15)
+                        .padding(.bottom, 60)
+                        
+                        
                     } else {
                         
                         HStack(spacing: 0) {
@@ -109,6 +116,12 @@ struct HomeView: View {
                                 Image(systemName: "checkmark.circle.fill")
                                     .font(.system(size: 26))
                                     .foregroundColor(Color("EntryBall"))
+                                    .background(
+                                        Circle()
+                                            .fill(Color.white)
+                                            .padding(3)
+                                    )
+                                    
                                     
                                 HStack (spacing: 3) {
                                     Text("\(monthlyEntryCount)")
@@ -146,6 +159,7 @@ struct HomeView: View {
                             }
                         }
                         journalSection
+                            
                     }
                     Spacer()
                 }
@@ -188,7 +202,7 @@ struct HomeView: View {
                 }) {
                     ZStack(alignment: .bottomLeading) {
                         RoundedRectangle(cornerRadius: 20)
-                            .fill(Color.white)
+                            .fill(colorScheme == .dark ? Color.black.opacity(0.3) : Color(UIColor.secondarySystemGroupedBackground))
                             .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)
                         VStack(alignment: .leading, spacing: 5) {
                             Text("\(todaysEntries.count)")

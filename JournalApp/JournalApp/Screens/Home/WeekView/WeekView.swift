@@ -10,6 +10,8 @@ import SwiftUI
 struct WeekView: View {
     
     @Binding var selectedDate: Date //clicked day
+    
+    @Environment(\.colorScheme) var colorScheme
     var currentWeek: [Date]
     
     var entries: [DailyEntry]
@@ -17,26 +19,6 @@ struct WeekView: View {
     
     var body: some View {
         HStack(spacing: 5) {
-            
-            /*VStack(spacing: 4) {
-                Image(systemName: "checkmark.circle.fill")
-                    .font(.system(size: 26))
-                    .foregroundColor(Color("EntryBall"))
-                    
-                HStack (spacing: 3) {
-                    Text("\(streakCount)")
-                        .font(.headline)
-                        .fontWeight(.bold)
-                        .foregroundColor(.primary)
-                    
-                    Text("Days")
-                        .font(.caption)
-                        .foregroundColor(.secondary)
-                        .padding(.top, 2)
-                }
-            }
-            .frame(width: 55)
-            .padding(.trailing, 2)*/
 
             ForEach(currentWeek, id: \.self) { date in
                 
@@ -87,7 +69,7 @@ struct WeekView: View {
                         } else {
                             
                             Capsule()
-                                .fill(Color.white)
+                                .fill(colorScheme == .dark ? Color.black.opacity(0.5) : Color(UIColor.secondarySystemGroupedBackground))
                                 .opacity(0.5)
                         }
    

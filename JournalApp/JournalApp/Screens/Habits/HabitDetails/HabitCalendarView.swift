@@ -11,6 +11,7 @@ import SwiftData
 struct HabitCalendarView: View {
     var habit: Habit
     @Binding var currentMonth: Date
+    @Environment(\.colorScheme) var colorScheme
     
     let color: Color
     let columns = Array(repeating: GridItem(.flexible()), count: 7)
@@ -106,7 +107,7 @@ struct HabitCalendarView: View {
             .padding(.horizontal)
         }
         .padding(.vertical)
-        .background(.white)
+        .background(colorScheme == .dark ? Color.black.opacity(0.5) : Color(UIColor.secondarySystemGroupedBackground))
         .cornerRadius(20)
         .padding(.horizontal)
         .shadow(color: .black.opacity(0.05), radius: 5, x: 0, y: 2)

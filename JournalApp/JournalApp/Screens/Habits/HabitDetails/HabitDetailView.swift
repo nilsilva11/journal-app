@@ -11,6 +11,7 @@ import SwiftData
 struct HabitDetailView: View {
     @Bindable var habit: Habit
     @Environment(\.dismiss) var dismiss
+    @Environment(\.colorScheme) var colorScheme
     
     @State private var currentMonth: Date = Date()
     @State private var showEditSheet: Bool = false
@@ -29,7 +30,7 @@ struct HabitDetailView: View {
                         ZStack {
                             Circle()
                                 .stroke(Color(.gray), lineWidth: 1)
-                                .fill(.white)
+                                .fill(colorScheme == .dark ? Color.black.opacity(0.5) : Color(UIColor.secondarySystemGroupedBackground))
                                 .frame(width: 120, height: 120)
                             //.shadow(color: Color(hex: habit.colorHex).opacity(0.3), radius: 10, x: 0, y: 0)
                             
