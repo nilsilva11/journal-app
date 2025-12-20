@@ -85,3 +85,15 @@ Month View | Date Picker |
 |------------------------|------------------------|-------------------------|------------------------|
 | ![Light](./17dec3.png) | ![Light](./17dec4.png) |![Light](./17dec5.png)   | ![Light](./17dec6.png) |
 
+
+## Habits Screen Screenshots 20 december 2025
+
+| Habits Empty State   | Home Screen | Home Screen (Calendar View) | 
+|------------------------|------------------------|-------------------------|
+| ![Light](./20dec1.png) | ![Light](./20dec2.png) |![Light](./20dec3.png)   | 
+
+
+| Goals Empty State  | Habits Tracker | Goals Screen | 
+|------------------------|------------------------|-------------------------|
+| ![Light](./20dec4.png) | ![Light](./20dec5.png) |![Light](./20dec6.png)   | 
+
