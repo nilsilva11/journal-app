@@ -61,7 +61,7 @@ struct GoalsView: View {
                                 .foregroundColor(.secondary)
                             
                             HStack(alignment: .firstTextBaseline) {
-                                Text("Goals")
+                                Text("Monthly Focus")
                                     .font(.system(size: 32, weight: .medium))
                                     .foregroundColor(.primary)
                                 
