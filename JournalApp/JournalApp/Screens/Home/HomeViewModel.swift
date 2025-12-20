@@ -7,6 +7,7 @@
 
 import Foundation
 import SwiftData
+import SwiftUI
 
 @Observable
 class HomeViewModel {
@@ -49,21 +50,44 @@ class HomeViewModel {
     }
     
     func saveEntry(context: ModelContext, existingEntry: DailyEntry?, title: String, text: String) {
-            if let existingEntry = existingEntry {
-                //edit
-                existingEntry.title = title
-                existingEntry.text = text
-                
-            } else {
-                //create
-                let newEntry = DailyEntry(
-                    date: selectedDate,
-                    title: title,
-                    text: text
-                )
-                context.insert(newEntry)
-            }
+        if let existingEntry = existingEntry {
+            //edit
+            existingEntry.title = title
+            existingEntry.text = text
             
-            try? context.save()
+        } else {
+            //create
+            let newEntry = DailyEntry(
+                date: selectedDate,
+                title: title,
+                text: text
+            )
+            context.insert(newEntry)
         }
+        
+        try? context.save()
+    }
+    
+    func getHabitsForSelectedDate(from allHabits: [Habit]) -> [Habit] {
+        let calendar = Calendar.current
+        let weekday = calendar.component(.weekday, from: selectedDate)
+        
+        let selectedDay = calendar.startOfDay(for: selectedDate)
+    
+        return allHabits.filter { habit in
+            let habitStartDay = calendar.startOfDay(for: habit.startDate)
+            let isAfterStartDate = selectedDay >= habitStartDay
+            let isCorrectDay = habit.frequency.contains(weekday)
+            
+            return isAfterStartDate && isCorrectDay  
+        }
+    }
+    
+    func toggleHabit(_ habit: Habit) {
+        withAnimation(.spring(response: 0.4, dampingFraction: 0.6)) {
+            
+            habit.toggleCompletion(on: selectedDate)
+        }
+    }
 }
+

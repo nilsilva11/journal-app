@@ -71,8 +71,12 @@ struct HabitRingView: View {
                         .frame(width: 60, height: 60)
                         .rotationEffect(.degrees(-90))
                     
-                    Text(habit.icon)
-                        .font(.title2)
+                    Image(systemName: habit.icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 24, height: 24)
+                        .foregroundColor(Color(hex: habit.colorHex))
+                        .fontWeight(.bold)
                         .opacity(isCompleted ? 1 : 0.7)
                         .scaleEffect(isCompleted ? 1.1 : 1.0)
                 }
@@ -89,7 +93,6 @@ struct HabitRingView: View {
     }
 }
 
-
 #Preview {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
@@ -97,18 +100,15 @@ struct HabitRingView: View {
         
         let weekday = Calendar.current.component(.weekday, from: Date())
         
-        let h1 = Habit(title: "Meditate", icon: "🧘‍♀️", colorHex: "#8E44AD", frequency: [weekday], startDate: Date())
-        let h2 = Habit(title: "Water", icon: "💧", colorHex: "#3498DB", frequency: [weekday], startDate: Date())
-        let h3 = Habit(title: "Water", icon: "💧", colorHex: "#3498DB", frequency: [weekday], startDate: Date())
-        let h4 = Habit(title: "Water", icon: "💧", colorHex: "#3498DB", frequency: [weekday], startDate: Date())
-        let h5 = Habit(title: "Water", icon: "💧", colorHex: "#3498DB", frequency: [weekday], startDate: Date())
-        let h6 = Habit(title: "Water", icon: "💧", colorHex: "#3498DB", frequency: [weekday], startDate: Date())
+        let h1 = Habit(title: "Meditate", icon: "brain.head.profile", colorHex: "#8E44AD", frequency: [weekday], startDate: Date())
+        let h2 = Habit(title: "Water", icon: "drop.fill", colorHex: "#3498DB", frequency: [weekday], startDate: Date())
+        let h3 = Habit(title: "Run", icon: "figure.run", colorHex: "#E67E22", frequency: [weekday], startDate: Date())
+        let h4 = Habit(title: "Sleep", icon: "bed.double.fill", colorHex: "#2ECC71", frequency: [weekday], startDate: Date())
+        
         container.mainContext.insert(h1)
         container.mainContext.insert(h2)
         container.mainContext.insert(h3)
         container.mainContext.insert(h4)
-        container.mainContext.insert(h5)
-        container.mainContext.insert(h6)
         
         return DailyHabitsRow()
             .modelContainer(container)

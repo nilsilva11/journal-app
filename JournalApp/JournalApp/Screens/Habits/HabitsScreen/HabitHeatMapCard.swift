@@ -30,8 +30,11 @@ struct HabitHeatmapCard: View {
                     Circle()
                         .fill(.white.opacity(0.5))
                         .frame(width: 40, height: 40)
-                    Text(habit.icon)
-                        .font(.system(size: 20))
+                    Image(systemName: habit.icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(Color(hex: habit.colorHex))
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
@@ -132,8 +135,8 @@ struct HabitHeatmapCard: View {
 
 #Preview {
     HabitHeatmapCard(
-            habit: Habit(title: "Morning Run", icon: "🏃‍♂️", colorHex: "FF5733", frequency: [1,2,4,5], startDate: Date(), endDate: nil),
-            onEdit: {},   
+            habit: Habit(title: "Morning Run", icon: "figure.run", colorHex: "FF5733", frequency: [1,2,4,5], startDate: Date(), endDate: nil),
+            onEdit: {},
             onDelete: {}
         )
         .padding()

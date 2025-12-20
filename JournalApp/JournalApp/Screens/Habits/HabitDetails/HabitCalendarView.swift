@@ -68,10 +68,11 @@ struct HabitCalendarView: View {
                         let isCompleted = habit.isCompleted(on: date)
                         let isToday = Calendar.current.isDateInToday(date)
                         let isFuture = date > Date()
+                        let isBeforeStart = Calendar.current.startOfDay(for: date) < Calendar.current.startOfDay(for: habit.startDate)
                         
                         Button(action: {
                            
-                            if !isFuture {
+                            if !isFuture && !isBeforeStart {
                                 withAnimation {
                                     habit.toggleCompletion(on: date)
                                 }

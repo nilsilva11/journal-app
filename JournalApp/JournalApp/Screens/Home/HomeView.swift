@@ -13,6 +13,7 @@ struct HomeView: View {
     //to show monthly calendar view
     @State private var viewModel = HomeViewModel()
     @State private var showCalendarView: Bool = false
+    @Query var allHabits: [Habit]
     
     @State private var browsingMonth: Date = Date()
     @State private var activeSheet: SheetConfig?
@@ -53,6 +54,7 @@ struct HomeView: View {
     }
     
     var body: some View {
+    
         
         ZStack {
             Color(UIColor.systemGray6)
@@ -173,7 +175,10 @@ struct HomeView: View {
     var journalSection: some View {
         VStack(alignment: .leading, spacing: 15) {
             
+            let habitsForDay = viewModel.getHabitsForSelectedDate(from: allHabits)
+            
             HStack(spacing: 15) {
+                
                 
                 //open entries
                 Button(action: {
@@ -223,8 +228,35 @@ struct HomeView: View {
                 .buttonStyle(.plain)
             }
             .padding(.horizontal)
+            
+            if !habitsForDay.isEmpty {
+                VStack(alignment: .leading, spacing: 15) {
+                    
+                    
+                    Text(Calendar.current.isDateInToday(viewModel.selectedDate) ? "Today's Focus" : "History")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .padding(.horizontal, 20)
+                    
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 15) {
+                            ForEach(habitsForDay) { habit in
+                                HomeHabitCard(
+                                    habit: habit,
+                                        date: viewModel.selectedDate, 
+                                    onToggle: {
+                                        viewModel.toggleHabit(habit)
+                                        
+                                    }
+                                )
+                            }
+                        }
+                        .padding(.horizontal, 20)
+                    }
+                }
+                .padding(.bottom, 20)
+            }
         }
-        
         //notes list sheet
         .sheet(isPresented: $showAllNotesSheet) {
             DailyNotesListView(

@@ -32,9 +32,9 @@ struct TrackerView: View {
                     .zIndex(1)
                     
                     ScrollView {
-                        VStack(alignment: .leading, spacing: 15) {
+                        VStack(alignment: .leading, spacing: 10) {
                             
-                            Spacer().frame(height: 10)
+                            Spacer().frame(height: 20)
                             
                             VStack(alignment: .leading, spacing: 0) {
                                 

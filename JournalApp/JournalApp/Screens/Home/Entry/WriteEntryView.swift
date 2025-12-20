@@ -34,6 +34,7 @@ struct WriteEntryView: View {
                 TextField("Title", text: $title)
                     .font(.title2.bold())
                     .padding(.horizontal)
+                    .autocorrectionDisabled()
                 
                 Divider().padding(.horizontal)
                 
@@ -48,6 +49,7 @@ struct WriteEntryView: View {
                     
                     TextEditor(text: $text)
                         .scrollContentBackground(.hidden)
+                        .autocorrectionDisabled()
                 }
                 .padding(.horizontal)
             }

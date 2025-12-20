@@ -33,9 +33,17 @@ struct HabitDetailView: View {
                                 .frame(width: 120, height: 120)
                             //.shadow(color: Color(hex: habit.colorHex).opacity(0.3), radius: 10, x: 0, y: 0)
                             
-                            Text(habit.icon)
-                                .font(.system(size: 60))
+                            Image(systemName: habit.icon)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: 60, height: 60) 
+                                .foregroundColor(Color(hex: habit.colorHex))
                         }
+                        
+                        Text("Started on \(habit.startDate.formatted(date: .long, time: .omitted))")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .padding(.top, 5)
                         
                     }
                     .frame(maxWidth: .infinity)
@@ -96,7 +104,7 @@ struct HabitDetailView: View {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Habit.self, configurations: config)
-        let habit = Habit(title: "Ler Livro", icon: "📖", colorHex: "8E44AD", frequency: [1,2], startDate: Date())
+        let habit = Habit(title: "Ler Livro", icon: "book.fill", colorHex: "8E44AD", frequency: [1,2], startDate: Date())
         habit.toggleCompletion(on: Date())
         
         return NavigationStack {

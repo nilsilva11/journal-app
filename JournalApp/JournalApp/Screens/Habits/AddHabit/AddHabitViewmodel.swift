@@ -13,7 +13,7 @@ import SwiftData
 class AddHabitViewModel {
     
     var title: String = ""
-    var icon: String = "📝"
+    var icon: String = ""
     var selectedColor: Color = Color("AppAccent")
     var selectedDays: Set<Int> = [1, 2, 3, 4, 5, 6, 7]
     var startDate: Date = Date()

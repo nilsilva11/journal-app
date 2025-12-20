@@ -32,8 +32,11 @@ struct HabitWeeklyCard: View {
                     Circle()
                         .fill(Color(.white).opacity(0.6))
                         .frame(width: 40, height: 40)
-                    Text(habit.icon)
-                        .font(.system(size: 20))
+                    Image(systemName: habit.icon)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 20, height: 20)
+                        .foregroundColor(Color(hex: habit.colorHex))
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
@@ -78,9 +81,10 @@ struct HabitWeeklyCard: View {
                                 let isCompleted = habit.isCompleted(on: date)
                                 let color = Color(hex: habit.colorHex)
                                 let isFuture = date > Date()
+                                let isBeforeStart = date < Calendar.current.startOfDay(for: habit.startDate)
                                 
                                 Button(action: {
-                                    if !isFuture {
+                                    if !isFuture && !isBeforeStart {
                                         withAnimation(.spring(response: 0.3, dampingFraction: 0.6)) {
                                             habit.toggleCompletion(on: date)
                                         }
@@ -96,7 +100,7 @@ struct HabitWeeklyCard: View {
                                         } else {
                                             Circle()
                                                 .fill(color.opacity(0.1))
-                                            if !isFuture {
+                                            if !isFuture && !isBeforeStart {
                                                 Circle().stroke(color.opacity(0.3), lineWidth: 1)
                                                 
                                             }
@@ -148,7 +152,7 @@ struct HabitWeeklyCard: View {
     do {
         let config = ModelConfiguration(isStoredInMemoryOnly: true)
         let container = try ModelContainer(for: Habit.self, configurations: config)
-        let habit = Habit(title: "Party", icon: "🎉", colorHex: "#F1C40F", frequency: [1,2,3,4,5,6,7], startDate: Date())
+        let habit = Habit(title: "Party", icon: "figure.walk", colorHex: "#F1C40F", frequency: [1,2,3,4,5,6,7], startDate: Date())
         
         return ZStack {
             Color(UIColor.systemGray6).ignoresSafeArea()
