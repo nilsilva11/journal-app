@@ -12,6 +12,7 @@ struct GoalsView: View {
     
     //to save data
     @Environment(\.modelContext) private var modelContext
+    @Environment(\.colorScheme) private var colorScheme
     
     //database
     @Query var allGoals: [Goal]
@@ -30,6 +31,18 @@ struct GoalsView: View {
         Date().formatted(.dateTime.month(.wide))
     }
     
+    private func getProgressMessage(completed: Int, total: Int) -> String {
+        guard total > 0 else { return "Set your intentions for this month" }
+        if completed == total {
+            return "All goals completed! Excellent work 🎉"
+        } else if completed == 0 {
+            return "Ready to make progress this month?"
+        } else if Double(completed) / Double(total) >= 0.5 {
+            return "More than halfway there! Keep going 💪"
+        } else {
+            return "Great start! Keep up the momentum ✨"
+        }
+    }
     
     var body: some View {
         
@@ -38,62 +51,65 @@ struct GoalsView: View {
             Color(UIColor.systemGray6)
                 .ignoresSafeArea()
             
-            
             ZStack(alignment: .top) {
                 
-                VStack{
+                VStack {
                     UniversalHeaderView(
-                        showDate: false,
+                        showDate: false
                     )
                 }
                 .zIndex(1)
-                
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 20) {
                         
                         Spacer().frame(height: 5)
                         
-                        VStack(alignment: .leading, spacing: 0) {
-                            
-                            Text(currentMonthName)
-                                .font(.system(size: 25, weight: .regular))
-                                .foregroundColor(.secondary)
-                            
-                            HStack(alignment: .firstTextBaseline) {
+                        HStack(alignment: .center) {
+                            VStack(alignment: .leading, spacing: 0) {
+                                Text(currentMonthName)
+                                    .font(.system(size: 25, weight: .regular))
+                                    .foregroundColor(.secondary)
+                                
                                 Text("Monthly Focus")
                                     .font(.system(size: 32, weight: .medium))
                                     .foregroundColor(.primary)
-                                
+                            }
+                            
+                            Spacer()
+                            
+                            if !allGoals.isEmpty {
+                                Button(action: {
+                                    showSheet = true
+                                }) {
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 18, weight: .bold))
+                                        .foregroundColor(.white)
+                                        .frame(width: 44, height: 44)
+                                        .background(Color("AppAccent"))
+                                        .clipShape(Circle())
+                                        .shadow(color: Color("AppAccent").opacity(0.35), radius: 6, x: 0, y: 3)
+                                }
+                                .buttonStyle(ScaleButtonStyle())
                             }
                         }
                         .padding(.horizontal, 15)
                         .padding(.top, 60)
                         .sheet(isPresented: $showSheet) {
-                            
                             AddGoalView(onSave: { (text, subtext) in
-                                
-                                // add goal
                                 viewModel.addGoal(text: text, subtext: subtext)
-                                
-                                showSheet = false // 3. close sheet
+                                showSheet = false
                             })
-                            // bottomsheet
                             .presentationDetents([.height(400)])
                         }
                         .sheet(item: $selectedGoal) { goalToEdit in
-                            
                             AddGoalView(
-                                //choose goal that was stored
                                 goalToEdit: goalToEdit,
                                 onSave: { (text, subtext) in
-                                    
-                                    //edit
                                     viewModel.updateGoal(goal: goalToEdit, text: text, subtext: subtext)
                                     selectedGoal = nil
                                 },
                                 onDelete: {
-                                    
                                     viewModel.deleteGoal(goalToEdit)
                                     selectedGoal = nil
                                 }
@@ -102,13 +118,12 @@ struct GoalsView: View {
                         }
                         
                         if allGoals.isEmpty {
-                            
                             // --- EMPTY STATE VIEW ---
                             VStack(spacing: 5) {
                                 
                                 Spacer().frame(height: 50)
                                 
-                                Image("Journal") 
+                                Image("Journal")
                                     .resizable()
                                     .scaledToFit()
                                     .frame(height: 240)
@@ -144,26 +159,68 @@ struct GoalsView: View {
                             }
                             .frame(maxWidth: .infinity)
                             
-                            
                         } else {
+                            let completedCount = viewModel.filterCompleted(goals: allGoals).count
+                            let totalCount = allGoals.count
+                            let percent = totalCount > 0 ? Int((Double(completedCount) / Double(totalCount)) * 100) : 0
                             
-
                             VStack(spacing: 20) {
-                                HStack {
-                                    let completedCount = viewModel.filterCompleted(goals: allGoals).count
-                                    let totalCount = allGoals.count
-                                    
-                                    VStack (alignment: .leading, spacing: 5){
-                                        Text("\(completedCount) of \(totalCount) Completed")
-                                            .font(.subheadline)
-                                            .foregroundColor(.secondary)
-                                            .padding(.horizontal)
+                                // Monthly Progress Overview Card
+                                VStack(alignment: .leading, spacing: 14) {
+                                    HStack(alignment: .center) {
+                                        VStack(alignment: .leading, spacing: 4) {
+                                            Text("Monthly Progress")
+                                                .font(.headline)
+                                                .fontWeight(.bold)
+                                                .foregroundColor(.primary)
+                                            
+                                            Text(getProgressMessage(completed: completedCount, total: totalCount))
+                                                .font(.caption)
+                                                .foregroundColor(.secondary)
+                                        }
                                         
-                                        ProgressBarView(current: Double(completedCount), total: Double(totalCount))
-                                            .padding(.horizontal)
-                                            .frame(maxWidth: .infinity)
+                                        Spacer()
+                                        
+                                        // Percentage Pill
+                                        HStack(spacing: 4) {
+                                            Text("\(percent)%")
+                                                .font(.system(size: 17, weight: .bold))
+                                                .foregroundColor(Color("AppAccent"))
+                                            
+                                            if percent == 100 && totalCount > 0 {
+                                                Image(systemName: "checkmark.seal.fill")
+                                                    .font(.system(size: 14))
+                                                    .foregroundColor(Color("AppAccent"))
+                                            }
+                                        }
+                                        .padding(.horizontal, 12)
+                                        .padding(.vertical, 6)
+                                        .background(Color("AppAccent").opacity(0.12))
+                                        .clipShape(Capsule())
+                                    }
+                                    
+                                    ProgressBarView(current: Double(completedCount), total: Double(totalCount))
+                                    
+                                    HStack {
+                                        Text("\(completedCount) of \(totalCount) goals completed")
+                                            .font(.caption)
+                                            .fontWeight(.medium)
+                                            .foregroundColor(.secondary)
+                                        
+                                        Spacer()
                                     }
                                 }
+                                .padding(18)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 22)
+                                        .fill(colorScheme == .dark ? Color(hex: "18181A") : Color(UIColor.secondarySystemGroupedBackground))
+                                )
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 22)
+                                        .stroke(Color.gray.opacity(0.12), lineWidth: 1)
+                                )
+                                .shadow(color: Color.black.opacity(colorScheme == .dark ? 0.2 : 0.04), radius: 6, x: 0, y: 2)
+                                .padding(.horizontal, 15)
                                 
                                 MonthGoalsCardView(
                                     completed: viewModel.filterCompleted(goals: allGoals),
@@ -183,16 +240,12 @@ struct GoalsView: View {
                         }
                         
                         Spacer(minLength: 100)
-                        
                     }
-                    
                 }
                 .scrollIndicators(.hidden)
                 .contentMargins(.bottom, 70, for: .scrollContent)
-
                 
-                
-                Spacer()//to get everything up
+                Spacer()
             }
         }
         .onAppear {
@@ -200,11 +253,24 @@ struct GoalsView: View {
         }
         .contentMargins(.bottom, 70, for: .scrollContent)
     }
-    
 }
 
-
 #Preview {
-    GoalsView()
-        .modelContainer(for: Goal.self, inMemory: true)
+    do {
+        let config = ModelConfiguration(isStoredInMemoryOnly: true)
+        let container = try ModelContainer(for: Goal.self, configurations: config)
+        
+        let g1 = Goal(text: "Run 50km this month", subtext: "Reach milestone before the 25th", isCompleted: false)
+        let g2 = Goal(text: "Read 2 books", subtext: "Atomic Habits and Deep Work", isCompleted: false)
+        let g3 = Goal(text: "Meditate 15 mins daily", subtext: "Morning mindfulness session", isCompleted: true)
+        
+        container.mainContext.insert(g1)
+        container.mainContext.insert(g2)
+        container.mainContext.insert(g3)
+        
+        return GoalsView()
+            .modelContainer(container)
+    } catch {
+        return Text("Preview error")
+    }
 }
